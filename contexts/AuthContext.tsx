@@ -23,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Fetch user data from our users table
   const fetchUserData = async (userId: string) => {
+    console.log('=== FETCHING USER DATA ===', userId);
     try {
       const { data, error } = await supabase
         .from('users')
@@ -34,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error('Error fetching user data:', error);
         return;
       }
+      console.log('=== USER DATA FETCHED ===', data);
       setUserData(data);
     } catch (error) {
       console.error('Error fetching user data:', error);

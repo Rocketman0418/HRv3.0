@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Dimensions,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
@@ -76,8 +77,14 @@ export default function OnboardingFlow() {
   };
 
   const handleComplete = async () => {
+    console.log('=== ONBOARDING COMPLETION STARTED ===');
+    console.log('User ID:', userData?.id);
     setLoading(true);
     try {
+      if (!userData?.id) {
+        throw new Error('No user ID available');
+      }
+
       const { error } = await supabase
         .from('users')
         .update({
@@ -86,11 +93,16 @@ export default function OnboardingFlow() {
         })
         .eq('id', userData?.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database update error:', error);
+        throw error;
+      }
       
+      console.log('=== ONBOARDING COMPLETION SUCCESS ===');
       // The auth context will automatically refresh and redirect to main app
     } catch (error) {
-      console.error('Error completing onboarding:', error);
+      console.error('=== ONBOARDING COMPLETION ERROR ===', error);
+      Alert.alert('Error', 'Failed to complete onboarding. Please try again.');
     } finally {
       setLoading(false);
     }
