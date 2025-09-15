@@ -99,25 +99,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           onboarding_step: 'mission',
         };
 
-        if (!supabaseAdmin) {
-          console.warn('Service role not available, using regular client for user creation');
-          const { error: profileError } = await supabase
-            .from('users')
-            .insert([newUserProfile]);
-          
-          if (profileError) {
-            console.error('Error creating user profile:', profileError);
-            throw new Error('Failed to create user profile');
-          }
-        } else {
-          const { error: profileError } = await supabaseAdmin
-            .from('users')
-            .insert([newUserProfile]);
+        console.log('Creating user profile:', newUserProfile);
+        
+        const client = supabaseAdmin || supabase;
+        const { error: profileError } = await client
+          .from('users')
+          .insert([newUserProfile]);
 
-          if (profileError) {
-            console.error('Error creating user profile:', profileError);
-            throw new Error('Failed to create user profile');
-          }
+        if (profileError) {
+          console.error('Error creating user profile:', profileError);
+          throw new Error('Failed to create user profile');
         }
 
         // Set the user data immediately to ensure onboarding is triggered

@@ -8,7 +8,7 @@ import OnboardingFlow from '@/components/onboarding/OnboardingFlow';
 export default function IndexScreen() {
   const { session, userData, loading } = useAuth();
 
-  console.log('IndexScreen - session:', !!session, 'userData:', userData, 'loading:', loading);
+  console.log('IndexScreen - session:', !!session, 'userData onboarding_completed:', userData?.onboarding_completed, 'loading:', loading);
 
   if (loading) {
     return (
@@ -20,7 +20,7 @@ export default function IndexScreen() {
 
   if (session) {
     // Check if user needs onboarding
-    console.log('User logged in, checking onboarding:', userData?.onboarding_completed);
+    console.log('User logged in, userData exists:', !!userData, 'onboarding_completed:', userData?.onboarding_completed);
     if (userData && !userData.onboarding_completed) {
       console.log('Showing onboarding flow');
       return <OnboardingFlow />;
