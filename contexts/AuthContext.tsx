@@ -91,21 +91,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Create user profile in our users table
     if (data.user) {
       try {
-        const { error: profileError } = await supabaseAdmin
-          .from('users')
-          .insert([
-            {
-              id: data.user.id,
-              email: data.user.email,
-              name: name,
-              onboarding_completed: false,
-              onboarding_step: 'mission',
-            }
-          ]);
+        if (!supabaseAdmin) {
+          console.warn('Service role not available, using regular client for user creation');
+          const { error: profileError } = await supabase
+            .from('users')
+            .insert([
+              {
+                id: data.user.id,
+                email: data.user.email,
+                name: name,
+                onboarding_completed: false,
+                onboarding_step: 'mission',
+              }
+            ]);
+          
+          if (profileError) {
+            console.error('Error creating user profile:', profileError);
+            throw new Error('Failed to create user profile');
+          }
+        } else {
+          const { error: profileError } = await supabaseAdmin
+            .from('users')
+            .insert([
+              {
+                id: data.user.id,
+                email: data.user.email,
+                name: name,
+                onboarding_completed: false,
+                onboarding_step: 'mission',
+              }
+            ]);
 
-        if (profileError) {
-          console.error('Error creating user profile:', profileError);
-          throw new Error('Failed to create user profile');
+          if (profileError) {
+            console.error('Error creating user profile:', profileError);
+            throw new Error('Failed to create user profile');
+          }
         }
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);
@@ -115,7 +135,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Handle launch code if provided
       if (launchCode) {
         try {
-          const { data: codeData, error: codeError } = await supabaseAdmin
+          const client = supabaseAdmin || supabase;
+          const { data: codeData, error: codeError } = await client
             .from('launch_codes')
             .select('*')
             .eq('code', launchCode.toUpperCase())
@@ -125,7 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (!codeError && codeData) {
             // Record launch code usage
             try {
-              await supabaseAdmin
+              await client
                 .from('launch_code_usages')
                 .insert([
                   {
