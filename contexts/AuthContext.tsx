@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { Alert } from 'react-native';
-import { supabase } from '../lib/supabase';
+import { supabase, supabaseAdmin } from '../lib/supabase';
 
 interface AuthContextType {
   session: Session | null;
@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Create user profile in our users table
     if (data.user) {
       try {
-        const { error: profileError } = await supabase
+        const { error: profileError } = await supabaseAdmin
           .from('users')
           .insert([
             {
@@ -105,15 +105,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (profileError) {
           console.error('Error creating user profile:', profileError);
+          throw new Error('Failed to create user profile');
         }
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);
+        throw profileError;
       }
 
       // Handle launch code if provided
       if (launchCode) {
         try {
-          const { data: codeData, error: codeError } = await supabase
+          const { data: codeData, error: codeError } = await supabaseAdmin
             .from('launch_codes')
             .select('*')
             .eq('code', launchCode.toUpperCase())
@@ -123,7 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (!codeError && codeData) {
             // Record launch code usage
             try {
-              await supabase
+              await supabaseAdmin
                 .from('launch_code_usages')
                 .insert([
                   {
