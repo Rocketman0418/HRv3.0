@@ -129,7 +129,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         // Fetch the newly created user data immediately after creation
-        await fetchUserData(data.user.id);
+        const { data: newUserData, error: fetchError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', data.user.id)
+          .maybeSingle();
+        
+        if (!fetchError && newUserData) {
+          setUserData(newUserData);
+        }
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);
         throw profileError;
