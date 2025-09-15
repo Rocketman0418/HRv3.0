@@ -28,9 +28,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('users')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching user data:', error);
+        return;
+      }
       setUserData(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -87,19 +90,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Create user profile in our users table
     if (data.user) {
-      const { error: profileError } = await supabase
-        .from('users')
-        .insert([
-          {
-            id: data.user.id,
-            email: data.user.email,
-            name: name,
-            onboarding_completed: false,
-            onboarding_step: 'mission',
-          }
-        ]);
+      try {
+        const { error: profileError } = await supabase
+          .from('users')
+          .insert([
+            {
+              id: data.user.id,
+              email: data.user.email,
+              name: name,
+              onboarding_completed: false,
+              onboarding_step: 'mission',
+            }
+          ]);
 
-      if (profileError) {
+        if (profileError) {
+          console.error('Error creating user profile:', profileError);
+        }
+      } catch (profileError) {
         console.error('Error creating user profile:', profileError);
       }
 
@@ -111,18 +118,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             .select('*')
             .eq('code', launchCode.toUpperCase())
             .eq('is_active', true)
-            .single();
+            .maybeSingle();
 
           if (!codeError && codeData) {
             // Record launch code usage
-            await supabase
-              .from('launch_code_usages')
-              .insert([
-                {
-                  user_id: data.user.id,
-                  launch_code_id: codeData.id,
-                }
-              ]);
+            try {
+              await supabase
+                .from('launch_code_usages')
+                .insert([
+                  {
+                    user_id: data.user.id,
+                    launch_code_id: codeData.id,
+                  }
+                ]);
+            } catch (usageError) {
+              console.error('Error recording launch code usage:', usageError);
+            }
           }
         } catch (codeError) {
           console.error('Error processing launch code:', codeError);
