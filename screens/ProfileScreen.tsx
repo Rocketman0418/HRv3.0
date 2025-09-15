@@ -26,6 +26,18 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleDebugSignOut = async () => {
+    console.log('=== DEBUG SIGN OUT BUTTON PRESSED ===');
+    try {
+      console.log('DEBUG: Calling signOut function...');
+      await signOut();
+      console.log('=== DEBUG SIGN OUT COMPLETED SUCCESSFULLY ===');
+    } catch (error) {
+      console.error('=== DEBUG SIGN OUT ERROR ===', error);
+      Alert.alert('Debug Error', 'Failed to sign out. Please try again.');
+    }
+  };
+
   const stats = [
     {
       label: 'Total Fuel Points',
@@ -106,10 +118,7 @@ export default function ProfileScreen() {
           {/* DEBUG: Alternative sign out button */}
           <TouchableOpacity 
             style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
-            onPress={() => {
-              console.log('=== DEBUG SIGN OUT PRESSED ===');
-              handleSignOut();
-            }}
+            onPress={handleDebugSignOut}
           >
             <Ionicons name="bug-outline" size={20} color="#ef4444" />
             <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>

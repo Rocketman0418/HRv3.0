@@ -177,7 +177,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Current user:', !!user);
       console.log('Current userData:', !!userData);
       
+      // Clear state immediately
       setUserData(null);
+      setUser(null);
+      setSession(null);
       console.log('Cleared userData');
       
       const { error } = await supabase.auth.signOut();
