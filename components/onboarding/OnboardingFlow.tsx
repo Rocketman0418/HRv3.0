@@ -11,6 +11,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
+import GlassCard from '../GlassCard';
+import PrimaryButton from '../PrimaryButton';
+import { theme } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -21,7 +24,7 @@ const onboardingSteps = [
     subtitle: 'Your mission: Optimize your health and extend your healthspan',
     description: 'Transform your daily habits into fuel points and level up your health game.',
     icon: 'rocket-outline',
-    color: '#2563eb',
+    color: theme.primary,
   },
   {
     id: 'preview',
@@ -29,7 +32,7 @@ const onboardingSteps = [
     subtitle: 'You\'re among the first to experience the future of health optimization',
     description: 'This preview gives you access to core features. More exciting updates coming soon!',
     icon: 'eye-outline',
-    color: '#7c3aed',
+    color: theme.accentPurple,
   },
   {
     id: 'burn-streak',
@@ -37,7 +40,7 @@ const onboardingSteps = [
     subtitle: 'Consistency is the key to lasting health transformation',
     description: 'Complete daily activities to build your burn streak and unlock higher levels.',
     icon: 'flash-outline',
-    color: '#ef4444',
+    color: theme.streak,
   },
   {
     id: 'health',
@@ -45,7 +48,7 @@ const onboardingSteps = [
     subtitle: 'Monitor your progress with our comprehensive health scoring system',
     description: 'Your health score reflects your overall wellness across multiple dimensions.',
     icon: 'heart-outline',
-    color: '#10b981',
+    color: theme.success,
   },
   {
     id: 'launch',
@@ -53,7 +56,7 @@ const onboardingSteps = [
     subtitle: 'Your health optimization journey starts now',
     description: 'Complete daily boosts, join challenges, and watch your health score soar!',
     icon: 'checkmark-circle-outline',
-    color: '#f59e0b',
+    color: theme.warning,
   },
 ];
 
@@ -137,71 +140,66 @@ export default function OnboardingFlow() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        {/* Progress Indicator */}
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View 
-              style={[
-                styles.progressFill, 
-                { width: `${((currentStep + 1) / onboardingSteps.length) * 100}%` }
-              ]} 
-            />
-          </View>
-          <Text style={styles.progressText}>
-            {currentStep + 1} of {onboardingSteps.length}
-          </Text>
-        </View>
-
-        {/* Step Content */}
-        <View style={styles.stepContainer}>
-          <View style={[styles.iconContainer, { backgroundColor: `${currentStepData.color}20` }]}>
-            <Ionicons 
-              name={currentStepData.icon as any} 
-              size={64} 
-              color={currentStepData.color} 
-            />
-          </View>
-
-          <Text style={styles.title}>{currentStepData.title}</Text>
-          <Text style={styles.subtitle}>{currentStepData.subtitle}</Text>
-          <Text style={styles.description}>{currentStepData.description}</Text>
-        </View>
-
-        {/* Navigation */}
-        <View style={styles.navigationContainer}>
-          <TouchableOpacity
-            style={[styles.navButton, styles.backButton, currentStep === 0 && styles.hiddenButton]}
-            onPress={handleBack}
-            disabled={currentStep === 0}
-          >
-            <Ionicons name="chevron-back" size={20} color="#6b7280" />
-            <Text style={styles.backButtonText}>Back</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.navButton, styles.nextButton]}
-            onPress={handleNext}
-            disabled={loading}
-          >
-            <Text style={styles.nextButtonText}>
-              {currentStep === onboardingSteps.length - 1 ? 'Launch!' : 'Next'}
+      <GlassCard style={styles.content}>
+        <View style={styles.innerContent}>
+          {/* Progress Indicator */}
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View 
+                style={[
+                  styles.progressFill, 
+                  { width: `${((currentStep + 1) / onboardingSteps.length) * 100}%` }
+                ]} 
+              />
+            </View>
+            <Text style={styles.progressText}>
+              {currentStep + 1} of {onboardingSteps.length}
             </Text>
-            <Ionicons 
-              name={currentStep === onboardingSteps.length - 1 ? 'rocket' : 'chevron-forward'} 
-              size={20} 
-              color="white" 
-            />
-          </TouchableOpacity>
-        </View>
+          </View>
 
-        {/* Skip Option */}
-        {currentStep < onboardingSteps.length - 1 && (
-          <TouchableOpacity style={styles.skipButton} onPress={handleComplete}>
-            <Text style={styles.skipText}>Skip for now</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+          {/* Step Content */}
+          <View style={styles.stepContainer}>
+            <View style={[styles.iconContainer, { backgroundColor: `${currentStepData.color}20` }]}>
+              <Ionicons 
+                name={currentStepData.icon as any} 
+                size={72} 
+                color={currentStepData.color} 
+              />
+            </View>
+
+            <Text style={styles.title}>{currentStepData.title}</Text>
+            <Text style={styles.subtitle}>{currentStepData.subtitle}</Text>
+            <Text style={styles.description}>{currentStepData.description}</Text>
+          </View>
+
+          {/* Navigation */}
+          <View style={styles.navigationContainer}>
+            <TouchableOpacity
+              style={[styles.navButton, styles.backButton, currentStep === 0 && styles.hiddenButton]}
+              onPress={handleBack}
+              disabled={currentStep === 0}
+            >
+              <Ionicons name="chevron-back" size={20} color={theme.textMuted} />
+              <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+
+            <PrimaryButton
+              title={currentStep === onboardingSteps.length - 1 ? 'Launch! 🚀' : 'Next'}
+              onPress={handleNext}
+              loading={loading}
+              disabled={loading}
+              style={styles.nextButton}
+            />
+          </View>
+
+          {/* Skip Option */}
+          {currentStep < onboardingSteps.length - 1 && (
+            <TouchableOpacity style={styles.skipButton} onPress={handleComplete}>
+              <Text style={styles.skipText}>Skip for now</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </GlassCard>
     </SafeAreaView>
   );
 }
@@ -209,63 +207,95 @@ export default function OnboardingFlow() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
+    padding: theme.spacing.lg,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    margin: 0,
+  },
+  innerContent: {
+    flex: 1,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
   },
   progressContainer: {
-    marginBottom: 48,
+    marginBottom: theme.spacing.xxl,
   },
   progressBar: {
-    height: 4,
-    backgroundColor: '#374151',
-    borderRadius: 2,
-    marginBottom: 8,
+    height: 6,
+    backgroundColor: theme.surfaceDark,
+    borderRadius: theme.radius.sm,
+    marginBottom: theme.spacing.sm,
+    shadowColor: 'rgba(0, 0, 0, 0.3)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#ff6b35',
-    borderRadius: 2,
+    backgroundColor: theme.primary,
+    borderRadius: theme.radius.sm,
+    shadowColor: theme.primary,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 4,
   },
   progressText: {
     fontSize: 14,
-    color: '#9ca3af',
+    color: theme.textMuted,
     textAlign: 'center',
+    fontWeight: '500',
   },
   stepContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: theme.spacing.md,
   },
   iconContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 32,
+    marginBottom: theme.spacing.xl,
+    shadowColor: 'rgba(0, 0, 0, 0.3)',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 8,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#f9fafb',
+    color: theme.text,
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
-    color: '#d1d5db',
+    color: theme.textSecondary,
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
   },
   description: {
-    fontSize: 16,
-    color: '#9ca3af',
+    fontSize: 17,
+    color: theme.textMuted,
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -273,14 +303,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
   },
   navButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
+    paddingVertical: theme.spacing.sm + 4,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.radius.md,
     minHeight: 48,
   },
   backButton: {
@@ -291,27 +321,19 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: '#9ca3af',
-    marginLeft: 4,
+    color: theme.textMuted,
+    marginLeft: theme.spacing.xs,
   },
   nextButton: {
-    backgroundColor: '#ff6b35',
     flex: 1,
-    marginLeft: 16,
-    justifyContent: 'center',
-  },
-  nextButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: 'white',
-    marginRight: 8,
+    marginLeft: theme.spacing.md,
   },
   skipButton: {
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: theme.spacing.sm + 4,
   },
   skipText: {
     fontSize: 14,
-    color: '#9ca3af',
+    color: theme.textMuted,
   },
 });

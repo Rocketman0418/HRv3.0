@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import GlassCard from './GlassCard';
+import { theme } from '../constants/theme';
 
 const boosts = [
   {
@@ -9,7 +11,7 @@ const boosts = [
     description: 'Drink 16oz of water',
     points: 25,
     icon: 'water',
-    color: '#3b82f6',
+    color: theme.accent,
     completed: true,
   },
   {
@@ -18,7 +20,7 @@ const boosts = [
     description: 'Eat a protein-rich meal',
     points: 40,
     icon: 'restaurant',
-    color: '#f59e0b',
+    color: theme.warning,
     completed: false,
   },
   {
@@ -27,7 +29,7 @@ const boosts = [
     description: '5 minutes of breathing exercise',
     points: 30,
     icon: 'leaf',
-    color: '#10b981',
+    color: theme.success,
     completed: false,
   },
 ];
@@ -44,50 +46,52 @@ export default function DailyBoosts() {
       
       <View style={styles.boostsList}>
         {boosts.map((boost) => (
-          <TouchableOpacity
+          <GlassCard
             key={boost.id}
-            style={[
-              styles.boostCard,
-              boost.completed && styles.completedCard,
-            ]}
-            onPress={() => handleBoostPress(boost)}
+            style={[styles.boostCard, boost.completed && styles.completedCard]}
           >
-            <View style={styles.boostContent}>
-              <View style={[
-                styles.iconContainer,
-                { backgroundColor: boost.completed ? '#f3f4f6' : `${boost.color}20` }
-              ]}>
-                <Ionicons 
-                  name={boost.completed ? 'checkmark' : boost.icon as any} 
-                  size={20} 
-                  color={boost.completed ? '#10b981' : boost.color} 
-                />
-              </View>
-              <View style={styles.textContainer}>
-                <Text style={[
-                  styles.boostTitle,
-                  boost.completed && styles.completedText,
+            <TouchableOpacity
+              style={styles.boostContent}
+              onPress={() => handleBoostPress(boost)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.boostRow}>
+                <View style={[
+                  styles.iconContainer,
+                  { backgroundColor: boost.completed ? `${theme.success}20` : `${boost.color}20` }
                 ]}>
-                  {boost.title}
-                </Text>
-                <Text style={[
-                  styles.boostDescription,
-                  boost.completed && styles.completedDescription,
-                ]}>
-                  {boost.description}
-                </Text>
+                  <Ionicons 
+                    name={boost.completed ? 'checkmark-circle' : boost.icon as any} 
+                    size={24} 
+                    color={boost.completed ? theme.success : boost.color} 
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={[
+                    styles.boostTitle,
+                    boost.completed && styles.completedText,
+                  ]}>
+                    {boost.title}
+                  </Text>
+                  <Text style={[
+                    styles.boostDescription,
+                    boost.completed && styles.completedDescription,
+                  ]}>
+                    {boost.description}
+                  </Text>
+                </View>
+                <View style={styles.pointsContainer}>
+                  <Text style={[
+                    styles.pointsText,
+                    boost.completed && styles.completedPoints,
+                  ]}>
+                    +{boost.points}
+                  </Text>
+                  <Text style={styles.fpText}>FP</Text>
+                </View>
               </View>
-              <View style={styles.pointsContainer}>
-                <Text style={[
-                  styles.pointsText,
-                  boost.completed && styles.completedPoints,
-                ]}>
-                  +{boost.points}
-                </Text>
-                <Text style={styles.fpText}>FP</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </GlassCard>
         ))}
       </View>
     </View>
@@ -96,86 +100,90 @@ export default function DailyBoosts() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingBottom: 32,
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.xl,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 4,
+    color: theme.text,
+    marginBottom: theme.spacing.xs,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   subtitle: {
     fontSize: 14,
-    color: '#9ca3af',
-    marginBottom: 16,
+    color: theme.textSecondary,
+    marginBottom: theme.spacing.md,
   },
   boostsList: {
-    gap: 12,
+    gap: theme.spacing.sm + 4,
   },
   boostCard: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    padding: 0,
   },
   completedCard: {
-    backgroundColor: '#374151',
     opacity: 0.8,
   },
   boostContent: {
+    padding: theme.spacing.md,
+  },
+  boostRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: theme.spacing.sm + 4,
+    shadowColor: 'rgba(0, 0, 0, 0.2)',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   textContainer: {
     flex: 1,
   },
   boostTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
-    color: '#f9fafb',
-    marginBottom: 4,
+    color: theme.text,
+    marginBottom: theme.spacing.xs,
   },
   completedText: {
     textDecorationLine: 'line-through',
-    color: '#9ca3af',
+    color: theme.textMuted,
   },
   boostDescription: {
     fontSize: 14,
-    color: '#9ca3af',
+    color: theme.textSecondary,
   },
   completedDescription: {
-    color: '#6b7280',
+    color: theme.textDark,
   },
   pointsContainer: {
     alignItems: 'center',
   },
   pointsText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#ff6b35',
+    color: theme.primary,
   },
   completedPoints: {
-    color: '#10b981',
+    color: theme.success,
   },
   fpText: {
-    fontSize: 10,
-    color: '#9ca3af',
-    marginTop: 2,
+    fontSize: 11,
+    color: theme.textMuted,
+    marginTop: theme.spacing.xs / 2,
+    fontWeight: '500',
   },
 });

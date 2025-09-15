@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
+import GlassCard from '../components/GlassCard';
+import PrimaryButton from '../components/PrimaryButton';
+import { theme } from '../constants/theme';
 
 export default function AuthScreen() {
   const [email, setEmail] = useState('');
@@ -72,118 +75,118 @@ export default function AuthScreen() {
           </Text>
         </View>
 
-        {/* Tab Switcher */}
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab, isSignUp && styles.activeTab]}
-            onPress={() => setIsSignUp(true)}
-          >
-            <Text style={[styles.tabText, isSignUp && styles.activeTabText]}>
-              Sign Up
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, !isSignUp && styles.activeTab]}
-            onPress={() => setIsSignUp(false)}
-          >
-            <Text style={[styles.tabText, !isSignUp && styles.activeTabText]}>
-              Sign In
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.form}>
-          {/* Name Field - Only for Sign Up */}
-          {isSignUp && (
-            <View style={styles.inputContainer}>
-              <Ionicons name="person-outline" size={20} color="#6b7280" style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Full Name"
-                value={name}
-                onChangeText={setName}
-                autoCapitalize="words"
-                autoCorrect={false}
-              />
-            </View>
-          )}
-
-          {/* Email Field */}
-          <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={20} color="#6b7280" style={styles.inputIcon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-
-          {/* Password Field */}
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={20} color="#6b7280" style={styles.inputIcon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-            />
-          </View>
-
-          {/* Launch Code Field - Only for Sign Up */}
-          {isSignUp && (
-            <View style={styles.inputContainer}>
-              <Ionicons name="rocket-outline" size={20} color="#6b7280" style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Launch Code (Optional)"
-                value={launchCode}
-                onChangeText={setLaunchCode}
-                autoCapitalize="characters"
-                autoCorrect={false}
-              />
-            </View>
-          )}
-
-          {/* Terms and Conditions - Only for Sign Up */}
-          {isSignUp && (
+        <GlassCard style={styles.formCard}>
+          {/* Tab Switcher */}
+          <View style={styles.tabContainer}>
             <TouchableOpacity
-              style={styles.termsContainer}
-              onPress={() => setAcceptTerms(!acceptTerms)}
+              style={[styles.tab, isSignUp && styles.activeTab]}
+              onPress={() => setIsSignUp(true)}
             >
-              <View style={[styles.checkbox, acceptTerms && styles.checkedBox]}>
-                {acceptTerms && (
-                  <Ionicons name="checkmark" size={16} color="white" />
-                )}
-              </View>
-              <Text style={styles.termsText}>
-                I accept the{' '}
-                <Text style={styles.termsLink}>Terms and Conditions</Text>
+              <Text style={[styles.tabText, isSignUp && styles.activeTabText]}>
+                Sign Up
               </Text>
             </TouchableOpacity>
-          )}
-
-          {/* Submit Button */}
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleAuth}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text style={styles.buttonText}>
-                {isSignUp ? 'Create Account' : 'Sign In'}
+            <TouchableOpacity
+              style={[styles.tab, !isSignUp && styles.activeTab]}
+              onPress={() => setIsSignUp(false)}
+            >
+              <Text style={[styles.tabText, !isSignUp && styles.activeTabText]}>
+                Sign In
               </Text>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
 
-        </View>
+          <View style={styles.form}>
+            {/* Name Field - Only for Sign Up */}
+            {isSignUp && (
+              <View style={styles.inputContainer}>
+                <Ionicons name="person-outline" size={20} color={theme.textMuted} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Full Name"
+                  placeholderTextColor={theme.textMuted}
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                />
+              </View>
+            )}
+
+            {/* Email Field */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="mail-outline" size={20} color={theme.textMuted} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor={theme.textMuted}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+
+            {/* Password Field */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="lock-closed-outline" size={20} color={theme.textMuted} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor={theme.textMuted}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            </View>
+
+            {/* Launch Code Field - Only for Sign Up */}
+            {isSignUp && (
+              <View style={styles.inputContainer}>
+                <Ionicons name="rocket-outline" size={20} color={theme.textMuted} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Launch Code (Optional)"
+                  placeholderTextColor={theme.textMuted}
+                  value={launchCode}
+                  onChangeText={setLaunchCode}
+                  autoCapitalize="characters"
+                  autoCorrect={false}
+                />
+              </View>
+            )}
+
+            {/* Terms and Conditions - Only for Sign Up */}
+            {isSignUp && (
+              <TouchableOpacity
+                style={styles.termsContainer}
+                onPress={() => setAcceptTerms(!acceptTerms)}
+              >
+                <View style={[styles.checkbox, acceptTerms && styles.checkedBox]}>
+                  {acceptTerms && (
+                    <Ionicons name="checkmark" size={16} color="white" />
+                  )}
+                </View>
+                <Text style={styles.termsText}>
+                  I accept the{' '}
+                  <Text style={styles.termsLink}>Terms and Conditions</Text>
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            {/* Submit Button */}
+            <PrimaryButton
+              title={isSignUp ? 'Launch Account 🚀' : 'Sign In'}
+              onPress={handleAuth}
+              loading={loading}
+              disabled={loading}
+              style={styles.submitButton}
+            />
+          </View>
+        </GlassCard>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -192,7 +195,6 @@ export default function AuthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
@@ -200,119 +202,113 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: theme.spacing.xl,
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#ff6b35',
-    marginBottom: 8,
+    color: theme.primary,
+    marginBottom: theme.spacing.sm,
+    textShadowColor: 'rgba(255, 107, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   subtitle: {
     fontSize: 16,
-    color: '#9ca3af',
+    color: theme.textSecondary,
+    textAlign: 'center',
+  },
+  formCard: {
+    marginHorizontal: theme.spacing.sm,
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 24,
+    backgroundColor: theme.surfaceDark,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.xs,
+    marginBottom: theme.spacing.lg,
   },
   tab: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: theme.spacing.sm + 4,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: theme.radius.sm,
   },
   activeTab: {
-    backgroundColor: '#374151',
-    shadowColor: '#000',
+    backgroundColor: theme.primary,
+    shadowColor: theme.primary,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
     elevation: 5,
   },
   tabText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#9ca3af',
+    color: theme.textMuted,
   },
   activeTabText: {
-    color: '#ff6b35',
+    color: '#FFFFFF',
   },
   form: {
-    gap: 16,
+    gap: theme.spacing.md,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#374151',
-    borderWidth: 0,
-    borderRadius: 12,
-    paddingHorizontal: 16,
+    backgroundColor: theme.surfaceDark,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 107, 0, 0.1)',
+    borderRadius: theme.radius.md,
+    paddingHorizontal: theme.spacing.md,
     minHeight: 52,
   },
   inputIcon: {
-    marginRight: 12,
+    marginRight: theme.spacing.sm + 4,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#f9fafb',
+    color: theme.text,
   },
   termsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: theme.spacing.sm,
   },
   checkbox: {
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#6b7280',
-    borderRadius: 4,
-    marginRight: 12,
+    borderColor: theme.textMuted,
+    borderRadius: theme.spacing.xs,
+    marginRight: theme.spacing.sm + 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkedBox: {
-    backgroundColor: '#ff6b35',
-    borderColor: '#ff6b35',
+    backgroundColor: theme.primary,
+    borderColor: theme.primary,
   },
   termsText: {
     fontSize: 14,
-    color: '#9ca3af',
+    color: theme.textSecondary,
     flex: 1,
   },
   termsLink: {
-    color: '#ff6b35',
+    color: theme.primary,
     fontWeight: '600',
   },
-  button: {
-    backgroundColor: '#ff6b35',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginTop: 8,
-    minHeight: 52,
-    justifyContent: 'center',
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+  submitButton: {
+    marginTop: theme.spacing.sm,
   },
   suggestionsContainer: {
     marginTop: 16,

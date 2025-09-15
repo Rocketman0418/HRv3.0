@@ -10,6 +10,7 @@ import { useAuth } from '../contexts/AuthContext';
 import FuelPointsCard from '../components/FuelPointsCard';
 import StatsGrid from '../components/StatsGrid';
 import DailyBoosts from '../components/DailyBoosts';
+import { theme } from '../constants/theme';
 
 export default function DashboardScreen() {
   const { user, userData } = useAuth();
@@ -35,24 +36,26 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
   },
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 16,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
   },
   greeting: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 4,
+    color: theme.text,
+    marginBottom: theme.spacing.xs,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   subtitle: {
     fontSize: 16,
-    color: '#9ca3af',
+    color: theme.textSecondary,
   },
 });
