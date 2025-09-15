@@ -15,8 +15,10 @@ export default function ProfileScreen() {
   const { user, userData, signOut } = useAuth();
 
   const handleSignOut = async () => {
+    console.log('Sign out button pressed');
     try {
       await signOut();
+      console.log('Sign out completed successfully');
     } catch (error) {
       console.error('Error signing out:', error);
       Alert.alert('Error', 'Failed to sign out. Please try again.');
