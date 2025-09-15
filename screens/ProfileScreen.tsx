@@ -6,12 +6,13 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function ProfileScreen() {
-  const { user, signOut } = useAuth();
+  const { user, userData, signOut } = useAuth();
 
   const handleSignOut = async () => {
     try {
@@ -25,25 +26,25 @@ export default function ProfileScreen() {
   const stats = [
     {
       label: 'Total Fuel Points',
-      value: user?.fuel_points?.toLocaleString() || '0',
+      value: userData?.fuel_points?.toLocaleString() || '0',
       icon: 'flame-outline',
       color: '#f59e0b',
     },
     {
       label: 'Current Level',
-      value: user?.level || 1,
+      value: userData?.level || 1,
       icon: 'trophy-outline',
       color: '#2563eb',
     },
     {
       label: 'Burn Streak',
-      value: `${user?.burn_streak || 0} days`,
+      value: `${userData?.burn_streak || 0} days`,
       icon: 'flash-outline',
       color: '#ef4444',
     },
     {
       label: 'Health Score',
-      value: `${user?.health_score || 0}/10`,
+      value: `${userData?.health_score || 0}/10`,
       icon: 'heart-outline',
       color: '#10b981',
     },
@@ -56,8 +57,8 @@ export default function ProfileScreen() {
           <View style={styles.avatarContainer}>
             <Ionicons name="person-circle-outline" size={80} color="#2563eb" />
           </View>
-          <Text style={styles.name}>{user?.name || 'Entrepreneur'}</Text>
-          <Text style={styles.email}>{user?.email}</Text>
+          <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
+          <Text style={styles.email}>{userData?.email || user?.email}</Text>
         </View>
 
         <View style={styles.statsContainer}>
