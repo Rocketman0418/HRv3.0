@@ -60,7 +60,7 @@ const onboardingSteps = [
 export default function OnboardingFlow() {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { userData } = useAuth();
+  const { userData, user, session, fetchUserData } = useAuth();
 
   const handleNext = () => {
     if (currentStep < onboardingSteps.length - 1) {
@@ -78,31 +78,56 @@ export default function OnboardingFlow() {
 
   const handleComplete = async () => {
     console.log('=== ONBOARDING COMPLETION STARTED ===');
+    console.log('Current userData:', userData);
     console.log('User ID:', userData?.id);
+    console.log('Session exists:', !!session);
+    console.log('User exists:', !!user);
+    
     setLoading(true);
     try {
       if (!userData?.id) {
-        throw new Error('No user ID available');
+        console.error('ERROR: No user ID available');
+        console.log('userData:', userData);
+        console.log('user from session:', user);
+        throw new Error('No user ID available. Please try signing in again.');
       }
 
+      console.log('Attempting to update user with ID:', userData.id);
       const { error } = await supabase
         .from('users')
         .update({
           onboarding_completed: true,
           onboarding_step: 'completed',
+          updated_at: new Date().toISOString(),
         })
         .eq('id', userData?.id);
 
       if (error) {
-        console.error('Database update error:', error);
+        console.error('=== DATABASE UPDATE ERROR ===', error);
+        console.log('Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         throw error;
       }
       
       console.log('=== ONBOARDING COMPLETION SUCCESS ===');
-      // The auth context will automatically refresh and redirect to main app
+      console.log('Database update successful, waiting for auth context refresh...');
+      
+      // Force a refresh of user data
+      console.log('Manually triggering user data refresh...');
+      if (userData?.id) {
+        await fetchUserData(userData.id);
+      }
+      
     } catch (error) {
       console.error('=== ONBOARDING COMPLETION ERROR ===', error);
-      Alert.alert('Error', 'Failed to complete onboarding. Please try again.');
+      Alert.alert(
+        'Error', 
+        `Failed to complete onboarding: ${error.message || 'Unknown error'}. Please try again.`
+      );
     } finally {
       setLoading(false);
     }
