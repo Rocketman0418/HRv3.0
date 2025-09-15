@@ -1,8 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function FuelPointsCard() {
+  const { userData } = useAuth();
+
+  const fuelPoints = userData?.fuel_points || 0;
+  const level = userData?.level || 1;
+  const progressToNextLevel = Math.min(((fuelPoints % 1000) / 1000) * 100, 100);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -11,13 +18,13 @@ export default function FuelPointsCard() {
         </View>
         <Text style={styles.title}>Fuel Points</Text>
       </View>
-      <Text style={styles.points}>2,847</Text>
+      <Text style={styles.points}>{fuelPoints.toLocaleString()}</Text>
       <Text style={styles.subtitle}>Keep burning to reach your next level!</Text>
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: '68%' }]} />
+          <View style={[styles.progressFill, { width: `${progressToNextLevel}%` }]} />
         </View>
-        <Text style={styles.progressText}>68% to Level 8</Text>
+        <Text style={styles.progressText}>{Math.round(progressToNextLevel)}% to Level {level + 1}</Text>
       </View>
     </View>
   );

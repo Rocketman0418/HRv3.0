@@ -19,7 +19,7 @@ export default function DashboardScreen() {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.greeting}>
-            Welcome back, {user?.name || 'Entrepreneur'}!
+            Welcome back, {userData?.name || 'Entrepreneur'}!
           </Text>
           <Text style={styles.subtitle}>Ready to optimize your health?</Text>
         </View>

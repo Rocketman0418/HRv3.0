@@ -1,43 +1,47 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../contexts/AuthContext';
 
-const stats = [
-  {
-    title: 'Health Score',
-    value: '8.2',
-    unit: '/10',
-    icon: 'heart',
-    color: '#10b981',
-    bgColor: '#d1fae5',
-  },
-  {
-    title: 'Burn Streak',
-    value: '12',
-    unit: 'days',
-    icon: 'flash',
-    color: '#ef4444',
-    bgColor: '#fee2e2',
-  },
-  {
-    title: 'Energy Level',
-    value: '94',
-    unit: '%',
-    icon: 'battery-charging',
-    color: '#3b82f6',
-    bgColor: '#dbeafe',
-  },
-  {
-    title: 'Focus Score',
-    value: '7.8',
-    unit: '/10',
-    icon: 'eye',
-    color: '#8b5cf6',
-    bgColor: '#ede9fe',
-  },
-];
 
 export default function StatsGrid() {
+  const { userData } = useAuth();
+
+  const stats = [
+    {
+      title: 'Health Score',
+      value: userData?.health_score?.toString() || '0',
+      unit: '/10',
+      icon: 'heart',
+      color: '#10b981',
+      bgColor: '#d1fae5',
+    },
+    {
+      title: 'Burn Streak',
+      value: userData?.burn_streak?.toString() || '0',
+      unit: 'days',
+      icon: 'flash',
+      color: '#ef4444',
+      bgColor: '#fee2e2',
+    },
+    {
+      title: 'Energy Level',
+      value: '0', // This would come from a calculation or separate field
+      unit: '%',
+      icon: 'battery-charging',
+      color: '#3b82f6',
+      bgColor: '#dbeafe',
+    },
+    {
+      title: 'Focus Score',
+      value: '0', // This would come from a calculation or separate field
+      unit: '/10',
+      icon: 'eye',
+      color: '#8b5cf6',
+      bgColor: '#ede9fe',
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Today's Performance</Text>
