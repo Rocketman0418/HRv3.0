@@ -148,7 +148,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
@@ -161,12 +161,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   settingsGroup: {
     marginBottom: 32,
@@ -175,11 +175,11 @@ const styles = StyleSheet.create({
   groupTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 12,
   },
   groupContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: {
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: '#374151',
   },
   settingLeft: {
     flexDirection: 'row',
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   settingLabel: {
     fontSize: 16,
-    color: '#1f2937',
+    color: '#f9fafb',
     marginLeft: 12,
   },
   footer: {
@@ -217,11 +217,11 @@ const styles = StyleSheet.create({
   version: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2563eb',
+    color: '#ff6b35',
     marginBottom: 4,
   },
   versionNumber: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
 });

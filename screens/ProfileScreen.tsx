@@ -132,7 +132,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
@@ -148,12 +148,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   email: {
     fontSize: 16,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   statsContainer: {
     paddingHorizontal: 20,
@@ -162,11 +162,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 16,
   },
   statCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -194,20 +194,20 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginBottom: 4,
   },
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
   },
   actionsContainer: {
     paddingHorizontal: 20,
     paddingBottom: 32,
   },
   actionButton: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   actionText: {
     flex: 1,
     fontSize: 16,
-    color: '#1f2937',
+    color: '#f9fafb',
     marginLeft: 12,
   },
   signOutButton: {

@@ -192,7 +192,7 @@ export default function AuthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
@@ -210,16 +210,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#ff6b35',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#e5e7eb',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
     padding: 4,
     marginBottom: 24,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   activeTab: {
-    backgroundColor: 'white',
+    backgroundColor: '#374151',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -244,10 +244,10 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   activeTabText: {
-    color: '#2563eb',
+    color: '#ff6b35',
   },
   form: {
     gap: 16,
@@ -255,9 +255,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
+    backgroundColor: '#374151',
+    borderWidth: 0,
     borderRadius: 12,
     paddingHorizontal: 16,
     minHeight: 52,
@@ -268,7 +267,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#1f2937',
+    color: '#f9fafb',
   },
   termsContainer: {
     flexDirection: 'row',
@@ -279,27 +278,27 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#d1d5db',
+    borderColor: '#6b7280',
     borderRadius: 4,
     marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkedBox: {
-    backgroundColor: '#2563eb',
-    borderColor: '#2563eb',
+    backgroundColor: '#ff6b35',
+    borderColor: '#ff6b35',
   },
   termsText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
     flex: 1,
   },
   termsLink: {
-    color: '#2563eb',
+    color: '#ff6b35',
     fontWeight: '600',
   },
   button: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#ff6b35',
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -318,15 +317,14 @@ const styles = StyleSheet.create({
   suggestionsContainer: {
     marginTop: 16,
     padding: 16,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#bfdbfe',
+    borderWidth: 0,
   },
   suggestionsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e40af',
+    color: '#ff6b35',
     marginBottom: 8,
   },
   suggestionsRow: {
@@ -334,7 +332,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   suggestionChip: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#ff6b35',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,

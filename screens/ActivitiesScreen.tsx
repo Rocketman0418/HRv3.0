@@ -87,7 +87,7 @@ export default function ActivitiesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
@@ -100,19 +100,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   activitiesContainer: {
     paddingHorizontal: 20,
     gap: 12,
   },
   activityCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 16,
     padding: 16,
     flexDirection: 'row',
@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   activityDescription: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   pointsContainer: {
     alignItems: 'center',
@@ -153,11 +153,11 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#ff6b35',
   },
   fpText: {
     fontSize: 12,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginTop: 2,
   },
 });

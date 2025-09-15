@@ -184,7 +184,7 @@ export default function OnboardingFlow() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0a0a0a',
   },
   content: {
     flex: 1,
@@ -196,18 +196,18 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 4,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: '#374151',
     borderRadius: 2,
     marginBottom: 8,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#2563eb',
+    backgroundColor: '#ff6b35',
     borderRadius: 2,
   },
   progressText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
     textAlign: 'center',
   },
   stepContainer: {
@@ -227,20 +227,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     textAlign: 'center',
     marginBottom: 16,
   },
   subtitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#4b5563',
+    color: '#d1d5db',
     textAlign: 'center',
     marginBottom: 16,
   },
   description: {
     fontSize: 16,
-    color: '#6b7280',
+    color: '#9ca3af',
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -266,11 +266,11 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginLeft: 4,
   },
   nextButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#ff6b35',
     flex: 1,
     marginLeft: 16,
     justifyContent: 'center',
@@ -287,6 +287,6 @@ const styles = StyleSheet.create({
   },
   skipText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
 });

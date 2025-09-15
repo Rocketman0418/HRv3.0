@@ -32,7 +32,7 @@ export default function FuelPointsCard() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 20,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#fef3c7',
+    backgroundColor: '#ff6b3520',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -63,17 +63,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1f2937',
+    color: '#f9fafb',
   },
   points: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#f59e0b',
+    color: '#ff6b35',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginBottom: 16,
   },
   progressContainer: {
@@ -81,18 +81,18 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#374151',
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#f59e0b',
+    backgroundColor: '#ff6b35',
     borderRadius: 4,
   },
   progressText: {
     fontSize: 12,
-    color: '#6b7280',
+    color: '#9ca3af',
     textAlign: 'center',
   },
 });

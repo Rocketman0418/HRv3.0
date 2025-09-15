@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 16,
   },
   grid: {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   statCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
     padding: 16,
     flex: 1,
@@ -106,17 +106,17 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   statUnit: {
     fontSize: 14,
     fontWeight: 'normal',
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   statTitle: {
     fontSize: 12,
-    color: '#6b7280',
+    color: '#9ca3af',
     textAlign: 'center',
   },
 });

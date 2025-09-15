@@ -102,19 +102,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginBottom: 16,
   },
   boostsList: {
     gap: 12,
   },
   boostCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f2937',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   completedCard: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#374151',
     opacity: 0.8,
   },
   boostContent: {
@@ -148,19 +148,19 @@ const styles = StyleSheet.create({
   boostTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1f2937',
+    color: '#f9fafb',
     marginBottom: 4,
   },
   completedText: {
     textDecorationLine: 'line-through',
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   boostDescription: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#9ca3af',
   },
   completedDescription: {
-    color: '#9ca3af',
+    color: '#6b7280',
   },
   pointsContainer: {
     alignItems: 'center',
@@ -168,14 +168,14 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#ff6b35',
   },
   completedPoints: {
     color: '#10b981',
   },
   fpText: {
     fontSize: 10,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginTop: 2,
   },
 });
