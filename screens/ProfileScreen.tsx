@@ -15,12 +15,13 @@ export default function ProfileScreen() {
   const { user, userData, signOut } = useAuth();
 
   const handleSignOut = async () => {
-    console.log('Sign out button pressed');
+    console.log('=== SIGN OUT BUTTON PRESSED ===');
     try {
+      console.log('Calling signOut function...');
       await signOut();
-      console.log('Sign out completed successfully');
+      console.log('=== SIGN OUT COMPLETED SUCCESSFULLY ===');
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('=== SIGN OUT ERROR ===', error);
       Alert.alert('Error', 'Failed to sign out. Please try again.');
     }
   };
@@ -100,6 +101,18 @@ export default function ProfileScreen() {
           <TouchableOpacity style={[styles.actionButton, styles.signOutButton]} onPress={handleSignOut}>
             <Ionicons name="log-out-outline" size={20} color="#ef4444" />
             <Text style={[styles.actionText, styles.signOutText]}>Sign Out</Text>
+          </TouchableOpacity>
+
+          {/* DEBUG: Alternative sign out button */}
+          <TouchableOpacity 
+            style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
+            onPress={() => {
+              console.log('=== DEBUG SIGN OUT PRESSED ===');
+              handleSignOut();
+            }}
+          >
+            <Ionicons name="bug-outline" size={20} color="#ef4444" />
+            <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

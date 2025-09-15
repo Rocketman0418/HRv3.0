@@ -160,16 +160,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      console.log('Signing out user...');
+      console.log('=== STARTING SIGN OUT PROCESS ===');
+      console.log('Current session:', !!session);
+      console.log('Current user:', !!user);
+      console.log('Current userData:', !!userData);
+      
       setUserData(null);
+      console.log('Cleared userData');
+      
       const { error } = await supabase.auth.signOut();
       if (error) {
-        console.error('Sign out error:', error);
+        console.error('=== SUPABASE SIGN OUT ERROR ===', error);
         throw error;
       }
-      console.log('Sign out successful');
+      console.log('=== SUPABASE SIGN OUT SUCCESSFUL ===');
     } catch (error) {
-      console.error('Error in signOut function:', error);
+      console.error('=== SIGN OUT FUNCTION ERROR ===', error);
       throw error;
     }
   };
