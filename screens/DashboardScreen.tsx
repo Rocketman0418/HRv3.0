@@ -12,7 +12,7 @@ import StatsGrid from '../components/StatsGrid';
 import DailyBoosts from '../components/DailyBoosts';
 
 export default function DashboardScreen() {
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
 
   return (
     <SafeAreaView style={styles.container}>
