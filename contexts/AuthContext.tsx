@@ -78,6 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, name: string, launchCode?: string) => {
+    console.log('Starting signUp process for:', email);
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -87,6 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     
     if (error) throw error;
+    console.log('Auth signup successful, user ID:', data.user?.id);
 
     // Create user profile in our users table
     if (data.user) {
@@ -99,21 +101,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           onboarding_step: 'mission',
         };
 
-        console.log('Creating user profile:', newUserProfile);
+        console.log('Creating user profile in database:', newUserProfile);
         
-        const client = supabaseAdmin || supabase;
-        const { error: profileError } = await client
+        // Always use regular supabase client for user creation
+        const { data: profileData, error: profileError } = await supabase
           .from('users')
-          .insert([newUserProfile]);
+          .insert([newUserProfile])
+          .select()
+          .single();
 
         if (profileError) {
           console.error('Error creating user profile:', profileError);
-          throw new Error('Failed to create user profile');
+          throw new Error(`Failed to create user profile: ${profileError.message}`);
         }
 
+        console.log('User profile created successfully:', profileData);
         // Set the user data immediately to ensure onboarding is triggered
-        console.log('Setting userData for new user:', newUserProfile);
-        setUserData(newUserProfile);
+        setUserData(profileData);
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);
         throw profileError;
