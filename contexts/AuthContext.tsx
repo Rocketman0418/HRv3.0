@@ -91,19 +91,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Create user profile in our users table
     if (data.user) {
       try {
+        const newUserProfile = {
+          id: data.user.id,
+          email: data.user.email,
+          name: name,
+          onboarding_completed: false,
+          onboarding_step: 'mission',
+        };
+
         if (!supabaseAdmin) {
           console.warn('Service role not available, using regular client for user creation');
           const { error: profileError } = await supabase
             .from('users')
-            .insert([
-              {
-                id: data.user.id,
-                email: data.user.email,
-                name: name,
-                onboarding_completed: false,
-                onboarding_step: 'mission',
-              }
-            ]);
+            .insert([newUserProfile]);
           
           if (profileError) {
             console.error('Error creating user profile:', profileError);
@@ -112,15 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           const { error: profileError } = await supabaseAdmin
             .from('users')
-            .insert([
-              {
-                id: data.user.id,
-                email: data.user.email,
-                name: name,
-                onboarding_completed: false,
-                onboarding_step: 'mission',
-              }
-            ]);
+            .insert([newUserProfile]);
 
           if (profileError) {
             console.error('Error creating user profile:', profileError);
@@ -128,16 +120,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
 
-        // Fetch the newly created user data immediately after creation
-        const { data: newUserData, error: fetchError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', data.user.id)
-          .maybeSingle();
-        
-        if (!fetchError && newUserData) {
-          setUserData(newUserData);
-        }
+        // Set the user data immediately to ensure onboarding is triggered
+        console.log('Setting userData for new user:', newUserProfile);
+        setUserData(newUserProfile);
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);
         throw profileError;
