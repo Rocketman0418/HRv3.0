@@ -183,23 +183,6 @@ export default function AuthScreen() {
             )}
           </TouchableOpacity>
 
-          {/* Launch Code Suggestions */}
-          {isSignUp && (
-            <View style={styles.suggestionsContainer}>
-              <Text style={styles.suggestionsTitle}>Try these launch codes:</Text>
-              <View style={styles.suggestionsRow}>
-                {['BETA50', 'PREVIEW100', 'ROCKET2024'].map((code) => (
-                  <TouchableOpacity
-                    key={code}
-                    style={styles.suggestionChip}
-                    onPress={() => setLaunchCode(code)}
-                  >
-                    <Text style={styles.suggestionText}>{code}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
