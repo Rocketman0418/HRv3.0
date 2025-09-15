@@ -127,6 +127,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             throw new Error('Failed to create user profile');
           }
         }
+
+        // Fetch the newly created user data immediately after creation
+        await fetchUserData(data.user.id);
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);
         throw profileError;
