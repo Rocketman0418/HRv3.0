@@ -79,6 +79,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string, name: string, launchCode?: string) => {
     console.log('Starting signUp process for:', email);
+    
+    // Create user profile data first
+    const newUserProfile = {
+      email: email,
+      name: name,
+      onboarding_completed: false,
+      onboarding_step: 'mission',
+    };
+    
+    // Set userData immediately to prevent race condition
+    console.log('Setting userData immediately to prevent race condition');
+    setUserData(newUserProfile);
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -93,20 +106,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Create user profile in our users table
     if (data.user) {
       try {
-        const newUserProfile = {
+        const completeUserProfile = {
           id: data.user.id,
-          email: data.user.email,
-          name: name,
-          onboarding_completed: false,
-          onboarding_step: 'mission',
+          ...newUserProfile,
         };
 
-        console.log('Creating user profile in database:', newUserProfile);
+        console.log('Creating user profile in database:', completeUserProfile);
         
         // Always use regular supabase client for user creation
         const { data: profileData, error: profileError } = await supabase
           .from('users')
-          .insert([newUserProfile])
+          .insert([completeUserProfile])
           .select()
           .single();
 
@@ -116,7 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         console.log('User profile created successfully:', profileData);
-        // Set the user data immediately to ensure onboarding is triggered
+        // Update userData with complete profile data including ID
         setUserData(profileData);
       } catch (profileError) {
         console.error('Error creating user profile:', profileError);

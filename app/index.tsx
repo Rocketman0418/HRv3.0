@@ -25,12 +25,23 @@ export default function IndexScreen() {
     // Check if user needs onboarding
     console.log('User logged in - userData exists:', !!userData);
     console.log('User logged in - onboarding_completed:', userData?.onboarding_completed);
+    console.log('User logged in - userData:', userData);
     
-    if (userData && !userData.onboarding_completed) {
+    if (userData && userData.onboarding_completed === false) {
       console.log('Showing onboarding flow');
       return <OnboardingFlow />;
     }
-    console.log('Redirecting to main app (onboarding completed or no userData)');
+    
+    if (!userData) {
+      console.log('No userData yet, staying in loading state');
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2563eb" />
+        </View>
+      );
+    }
+    
+    console.log('Redirecting to main app (onboarding completed)');
     return <Redirect href="/(tabs)" />;
   }
 
