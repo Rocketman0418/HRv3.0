@@ -11,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import HealthRocketBrand from '../components/HealthRocketBrand';
+import SpaceBackground from '../components/SpaceBackground';
 import { theme, iconStyles } from '../constants/theme';
 
 export default function ProfileScreen() {
