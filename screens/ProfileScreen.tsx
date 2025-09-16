@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
   },
   signOutContainer: {
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: 120, // Extra padding to clear tab bar (80px) + safe margin
   },
   signOutButton: {
     flexDirection: 'row',
