@@ -24,7 +24,6 @@ export default function AuthScreen() {
   const [name, setName] = useState('');
   const [launchCode, setLaunchCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const { signIn, signUp } = useAuth();
 
@@ -97,24 +96,8 @@ export default function AuthScreen() {
                 placeholderTextColor={theme.textMuted}
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry={isSignUp ? !showPassword : true}
+                secureTextEntry
               />
-
-              {isSignUp && (
-                <TouchableOpacity
-                  style={styles.showPasswordButton}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Ionicons 
-                    name={showPassword ? 'eye-off' : 'eye'} 
-                    size={20} 
-                    color={theme.textMuted} 
-                  />
-                  <Text style={styles.showPasswordText}>
-                    {showPassword ? 'Hide Password' : 'Show Password'}
-                  </Text>
-                </TouchableOpacity>
-              )}
 
               {isSignUp && (
                 <TextInput
@@ -202,20 +185,6 @@ const styles = StyleSheet.create({
   switchText: {
     color: theme.primary,
     fontSize: 16,
-    fontWeight: '500',
-  },
-  showPasswordButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
-  },
-  showPasswordText: {
-    color: theme.textMuted,
-    fontSize: 14,
-    marginLeft: theme.spacing.xs,
     fontWeight: '500',
   },
 });
