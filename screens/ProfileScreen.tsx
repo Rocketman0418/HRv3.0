@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import HealthRocketBrand from '../components/HealthRocketBrand';
 import SpaceBackground from '../components/SpaceBackground';
+import GlassCard from '../components/GlassCard';
 import { theme, iconStyles } from '../constants/theme';
 
 export default function ProfileScreen() {
@@ -29,107 +30,121 @@ export default function ProfileScreen() {
     }
   };
 
-  const handleDebugSignOut = async () => {
-    console.log('=== DEBUG SIGN OUT BUTTON PRESSED ===');
-    try {
-      console.log('DEBUG: Calling signOut function...');
-      await signOut();
-      console.log('=== DEBUG SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== DEBUG SIGN OUT ERROR ===', error);
-      Alert.alert('Debug Error', 'Failed to sign out. Please try again.');
-    }
-  };
-
   const stats = [
     {
       label: 'Total Fuel Points',
       value: userData?.fuel_points?.toLocaleString() || '0',
-      icon: 'flame-outline',
+      icon: 'flame',
       style: iconStyles.fuelPoints,
     },
     {
       label: 'Current Level',
       value: userData?.level || 1,
-      icon: 'trophy-outline',
+      icon: 'trophy',
       style: iconStyles.currentLevel,
     },
     {
       label: 'Burn Streak',
       value: `${userData?.burn_streak || 0} days`,
-      icon: 'flash-outline',
+      icon: 'flash',
       style: iconStyles.burnStreak,
     },
     {
       label: 'Health Score',
       value: `${userData?.health_score || 0}/10`,
-      icon: 'heart-outline',
+      icon: 'heart',
       style: iconStyles.healthScore,
+    },
+  ];
+
+  const actions = [
+    {
+      icon: 'person-outline',
+      title: 'Edit Profile',
+      subtitle: 'Update your personal information',
+      onPress: () => console.log('Edit Profile'),
+    },
+    {
+      icon: 'notifications-outline',
+      title: 'Notifications',
+      subtitle: 'Manage notification preferences',
+      onPress: () => console.log('Notifications'),
+    },
+    {
+      icon: 'help-circle-outline',
+      title: 'Help & Support',
+      subtitle: 'Get help and find answers',
+      onPress: () => console.log('Help & Support'),
     },
   ];
 
   return (
     <SpaceBackground>
       <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <HealthRocketBrand variant="round" size="small" showTagline={false} />
-          <View style={styles.avatarContainer}>
-            <Ionicons name="person-circle-outline" size={80} color={theme.primary} />
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <HealthRocketBrand variant="round" size="small" showTagline={false} />
+            <Text style={styles.headerTitle}>Profile</Text>
           </View>
-          <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
-          <Text style={styles.email}>{userData?.email || user?.email}</Text>
-        </View>
 
-        <View style={styles.statsContainer}>
-          <Text style={styles.sectionTitle}>Your Stats</Text>
-          {stats.map((stat, index) => (
-            <View key={index} style={styles.statCard}>
-              <View style={[styles.statIcon, stat.style]}>
-                <Ionicons name={stat.icon as any} size={24} color="white" />
-              </View>
-              <View style={styles.statContent}>
-                <Text style={styles.statLabel}>{stat.label}</Text>
-                <Text style={styles.statValue}>{stat.value}</Text>
-              </View>
+          <GlassCard style={styles.profileCard}>
+            <View style={styles.avatarContainer}>
+              <Ionicons name="person-circle-outline" size={80} color={theme.primary} />
             </View>
-          ))}
-        </View>
+            <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
+            <Text style={styles.email}>{userData?.email || user?.email}</Text>
+            <Text style={styles.level}>Level {userData?.level || 1}</Text>
+          </GlassCard>
 
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="person-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Edit Profile</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
+          <View style={styles.statsContainer}>
+            <Text style={styles.sectionTitle}>Your Stats</Text>
+            <View style={styles.statsGrid}>
+              {stats.map((stat, index) => (
+                <GlassCard key={index} style={styles.statCard}>
+                  <View style={[styles.statIcon, stat.style]}>
+                    <Ionicons name={stat.icon as any} size={20} color="white" />
+                  </View>
+                  <Text style={styles.statValue}>{stat.value}</Text>
+                  <Text style={styles.statLabel}>{stat.label}</Text>
+                </GlassCard>
+              ))}
+            </View>
+          </View>
 
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="notifications-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Notifications</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
+          <View style={styles.actionsContainer}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            <GlassCard style={styles.actionsCard}>
+              {actions.map((action, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.actionButton,
+                    index < actions.length - 1 && styles.actionButtonBorder,
+                  ]}
+                  onPress={action.onPress}
+                >
+                  <View style={styles.actionLeft}>
+                    <View style={styles.actionIcon}>
+                      <Ionicons name={action.icon as any} size={20} color={theme.primary} />
+                    </View>
+                    <View style={styles.actionText}>
+                      <Text style={styles.actionTitle}>{action.title}</Text>
+                      <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
+                    </View>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={theme.textMuted} />
+                </TouchableOpacity>
+              ))}
+            </GlassCard>
+          </View>
 
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="help-circle-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Help & Support</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.actionButton, styles.signOutButton]} onPress={handleSignOut}>
-            <Ionicons name="log-out-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, styles.signOutText]}>Sign Out</Text>
-          </TouchableOpacity>
-
-          {/* DEBUG: Alternative sign out button */}
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
-            onPress={handleDebugSignOut}
-          >
-            <Ionicons name="bug-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          <View style={styles.signOutContainer}>
+            <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+              <Ionicons name="log-out-outline" size={20} color={theme.error} />
+              <Text style={styles.signOutText}>Sign Out</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </SpaceBackground>
   );
@@ -138,106 +153,160 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
   },
   header: {
     alignItems: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
+    paddingVertical: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: theme.text,
+    marginTop: theme.spacing.sm,
+  },
+  profileCard: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    alignItems: 'center',
   },
   avatarContainer: {
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 4,
+    color: theme.text,
+    marginBottom: theme.spacing.xs,
   },
   email: {
     fontSize: 16,
-    color: '#9ca3af',
+    color: theme.textSecondary,
+    marginBottom: theme.spacing.xs,
+  },
+  level: {
+    fontSize: 14,
+    color: theme.primary,
+    fontWeight: '600',
   },
   statsContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 32,
+    paddingHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 16,
+    color: theme.text,
+    marginBottom: theme.spacing.md,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.sm,
   },
   statCard: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
+    flex: 1,
+    minWidth: '45%',
     alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    padding: theme.spacing.md,
   },
   statIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
-  },
-  statContent: {
-    flex: 1,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#9ca3af',
-    marginBottom: 4,
+    marginBottom: theme.spacing.sm,
+    shadowColor: theme.glass.glow,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#f9fafb',
+    color: theme.text,
+    marginBottom: theme.spacing.xs,
+    textAlign: 'center',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: theme.textSecondary,
+    textAlign: 'center',
+    fontWeight: '500',
   },
   actionsContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 32,
+    paddingHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+  },
+  actionsCard: {
+    padding: 0,
   },
   actionButton: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
+  },
+  actionButtonBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: theme.glass.borderLight,
+  },
+  actionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  actionIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: `${theme.primary}20`,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.sm,
   },
   actionText: {
     flex: 1,
+  },
+  actionTitle: {
     fontSize: 16,
-    color: '#f9fafb',
-    marginLeft: 12,
+    fontWeight: '500',
+    color: theme.text,
+    marginBottom: theme.spacing.xs / 2,
+  },
+  actionSubtitle: {
+    fontSize: 12,
+    color: theme.textSecondary,
+  },
+  signOutContainer: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.xl,
   },
   signOutButton: {
-    marginTop: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: `${theme.error}20`,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    borderWidth: 1,
+    borderColor: `${theme.error}40`,
   },
   signOutText: {
-    color: '#ef4444',
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.error,
+    marginLeft: theme.spacing.sm,
   },
 });
