@@ -16,7 +16,7 @@ export default function FuelPointsCard() {
     <GlassCard style={styles.container}>
       <View style={styles.header}>
         <View style={[styles.iconContainer, iconStyles.fuelPoints]}>
-          <Ionicons name="flame" size={28} color={theme.primary} />
+          <Ionicons name="flame" size={28} color="#FFFFFF" />
         </View>
         <Text style={styles.title}>Fuel Points</Text>
       </View>
