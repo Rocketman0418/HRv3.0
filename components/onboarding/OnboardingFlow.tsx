@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Alert,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import { useAuth } from '../../contexts/AuthContext';
 import SpaceBackground from '../SpaceBackground';
@@ -32,7 +33,7 @@ interface HealthAssessmentData {
 }
 
 export default function OnboardingFlow() {
-  const { userData, fetchUserData } = useAuth();
+  const { userData, fetchUserData, completeOnboarding } = useAuth();
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('mission');
   const [loading, setLoading] = useState(false);
   const [healthData, setHealthData] = useState<HealthAssessmentData>({
@@ -42,6 +43,18 @@ export default function OnboardingFlow() {
     nutrition: 5,
     biohacking: 5,
   });
+
+  // Add a quick bypass for testing - remove this in production
+  const handleQuickBypass = async () => {
+    setLoading(true);
+    try {
+      await completeOnboarding();
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Failed to complete onboarding');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Initialize step from user data
   useEffect(() => {
@@ -252,6 +265,15 @@ export default function OnboardingFlow() {
           <View style={styles.header}>
             <HealthRocketBrand variant="horizontal" size="medium" showTagline={true} />
             {renderProgressBar()}
+            
+            {/* Quick bypass button for testing - remove in production */}
+            <TouchableOpacity 
+              style={styles.bypassButton} 
+              onPress={handleQuickBypass}
+              disabled={loading}
+            >
+              <Text style={styles.bypassText}>Skip to Dashboard (Testing)</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.stepContainer}>
@@ -335,5 +357,19 @@ const styles = StyleSheet.create({
   launchButton: {
     marginTop: theme.spacing.md,
     minWidth: 200,
+  },
+  bypassButton: {
+    marginTop: theme.spacing.md,
+    padding: theme.spacing.sm,
+    backgroundColor: `${theme.warning}20`,
+    borderRadius: theme.radius.sm,
+    borderWidth: 1,
+    borderColor: `${theme.warning}40`,
+  },
+  bypassText: {
+    fontSize: 12,
+    color: theme.warning,
+    textAlign: 'center',
+    fontWeight: '500',
   },
 });

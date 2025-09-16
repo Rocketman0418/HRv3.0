@@ -12,6 +12,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, name: string, launchCode?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   fetchUserData: (userId: string) => Promise<void>;
+  completeOnboarding: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -195,6 +196,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     }
   };
+
+  const completeOnboarding = async () => {
+    if (!userData?.id) return;
+    
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ 
+          onboarding_completed: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userData.id);
+
+      if (error) throw error;
+      
+      // Refresh user data
+      await fetchUserData(userData.id);
+    } catch (error) {
+      console.error('Error completing onboarding:', error);
+      throw error;
+    }
+  };
+
   const value = {
     session,
     user,
@@ -204,6 +228,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut,
     fetchUserData,
+    completeOnboarding,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
