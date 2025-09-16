@@ -1,136 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   SafeAreaView,
-  TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../contexts/AuthContext';
-import HealthRocketBrand from '../components/HealthRocketBrand';
-import { theme, iconStyles } from '../constants/theme';
-import HealthRocketBrand from '../components/HealthRocketBrand';
-import { theme, iconStyles } from '../constants/theme';
+import { useAuth } from '../../contexts/AuthContext';
+import SpaceBackground from '../SpaceBackground';
+import HealthRocketBrand from '../HealthRocketBrand';
+import PrimaryButton from '../PrimaryButton';
+import GlassCard from '../GlassCard';
+import { theme } from '../../constants/theme';
 
-export default function ProfileScreen() {
-  const { user, userData, signOut } = useAuth();
+export default function OnboardingFlow() {
+  const { userData, fetchUserData } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleSignOut = async () => {
-    console.log('=== SIGN OUT BUTTON PRESSED ===');
+  const handleCompleteOnboarding = async () => {
+    console.log('=== STARTING ONBOARDING COMPLETION ===');
+    console.log('Current userData:', userData);
+    
+    if (!userData?.id) {
+      console.error('No user ID available for onboarding completion');
+      Alert.alert('Error', 'User data not available. Please try again.');
+      return;
+    }
+
+    setLoading(true);
+    
     try {
-      console.log('Calling signOut function...');
-      await signOut();
-      console.log('=== SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== SIGN OUT ERROR ===', error);
-      Alert.alert('Error', 'Failed to sign out. Please try again.');
+      console.log('Updating onboarding_completed to true for user:', userData.id);
+      
+      const { supabase } = await import('../../lib/supabase');
+      
+      const { data, error } = await supabase
+        .from('users')
+        .update({ 
+          onboarding_completed: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userData.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Database update error:', error);
+        throw new Error(`Failed to complete onboarding: ${error.message}`);
+      }
+
+      console.log('Database update successful:', data);
+      
+      // Manually refresh user data
+      console.log('Refreshing user data...');
+      await fetchUserData(userData.id);
+      console.log('User data refresh completed');
+      
+    } catch (error: any) {
+      console.error('Onboarding completion error:', error);
+      Alert.alert('Error', error.message || 'Failed to complete onboarding. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleDebugSignOut = async () => {
-    console.log('=== DEBUG SIGN OUT BUTTON PRESSED ===');
-    try {
-      console.log('DEBUG: Calling signOut function...');
-      await signOut();
-      console.log('=== DEBUG SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== DEBUG SIGN OUT ERROR ===', error);
-      Alert.alert('Debug Error', 'Failed to sign out. Please try again.');
-    }
-  };
-
-  const stats = [
-    {
-      label: 'Total Fuel Points',
-      value: userData?.fuel_points?.toLocaleString() || '0',
-      icon: 'flame-outline',
-      style: iconStyles.fuelPoints,
-    },
-    {
-      label: 'Current Level',
-      value: userData?.level || 1,
-      icon: 'trophy-outline',
-      style: iconStyles.currentLevel,
-    },
-    {
-      label: 'Burn Streak',
-      value: `${userData?.burn_streak || 0} days`,
-      icon: 'flash-outline',
-      style: iconStyles.burnStreak,
-    },
-    {
-      label: 'Health Score',
-      value: `${userData?.health_score || 0}/10`,
-      icon: 'heart-outline',
-      style: iconStyles.healthScore,
-    },
-  ];
 
   return (
     <SpaceBackground>
       <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <HealthRocketBrand variant="round" size="small" showTagline={false} />
-          <View style={styles.avatarContainer}>
-            <Ionicons name="person-circle-outline" size={80} color={theme.primary} />
+        <View style={styles.content}>
+          <View style={styles.brandContainer}>
+            <HealthRocketBrand variant="horizontal" size="large" showTagline={true} />
           </View>
-          <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
-          <Text style={styles.email}>{userData?.email || user?.email}</Text>
-        </View>
 
-        <View style={styles.statsContainer}>
-          <Text style={styles.sectionTitle}>Your Stats</Text>
-          {stats.map((stat, index) => (
-            <View key={index} style={styles.statCard}>
-              <View style={[styles.statIcon, stat.style]}>
-                <Ionicons name={stat.icon as any} size={24} color="white" />
-              </View>
-              <View style={styles.statContent}>
-                <Text style={styles.statLabel}>{stat.label}</Text>
-                <Text style={styles.statValue}>{stat.value}</Text>
-              </View>
+          <GlassCard style={styles.welcomeCard}>
+            <Text style={styles.title}>Welcome to Health Rocket!</Text>
+            <Text style={styles.subtitle}>
+              Ready to launch your health journey? Let's optimize your healthspan and unlock your potential.
+            </Text>
+            
+            <View style={styles.missionPoints}>
+              <Text style={styles.missionTitle}>Your Mission:</Text>
+              <Text style={styles.missionPoint}>🚀 Complete daily boosts to earn Fuel Points</Text>
+              <Text style={styles.missionPoint}>📈 Track your health score and progress</Text>
+              <Text style={styles.missionPoint}>🔥 Build your burn streak for maximum impact</Text>
+              <Text style={styles.missionPoint}>🏆 Level up and unlock new challenges</Text>
             </View>
-          ))}
+
+            <PrimaryButton
+              title="Launch My Journey"
+              onPress={handleCompleteOnboarding}
+              loading={loading}
+              style={styles.launchButton}
+            />
+          </GlassCard>
         </View>
-
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="person-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Edit Profile</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="notifications-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Notifications</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="help-circle-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Help & Support</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.actionButton, styles.signOutButton]} onPress={handleSignOut}>
-            <Ionicons name="log-out-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, styles.signOutText]}>Sign Out</Text>
-          </TouchableOpacity>
-
-          {/* DEBUG: Alternative sign out button */}
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
-            onPress={handleDebugSignOut}
-          >
-            <Ionicons name="bug-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
       </SafeAreaView>
     </SpaceBackground>
   );
@@ -139,106 +102,49 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
-  scrollView: {
+  content: {
     flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: theme.spacing.lg,
   },
-  header: {
+  brandContainer: {
     alignItems: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
+    marginBottom: theme.spacing.xl,
   },
-  avatarContainer: {
-    marginBottom: 16,
+  welcomeCard: {
+    padding: theme.spacing.xl,
   },
-  name: {
-    fontSize: 24,
+  title: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 4,
+    color: theme.text,
+    textAlign: 'center',
+    marginBottom: theme.spacing.md,
   },
-  email: {
-    fontSize: 16,
-    color: '#9ca3af',
+  subtitle: {
+    fontSize: 18,
+    color: theme.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xl,
+    lineHeight: 26,
   },
-  statsContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 32,
+  missionPoints: {
+    marginBottom: theme.spacing.xl,
   },
-  sectionTitle: {
+  missionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 16,
+    color: theme.primary,
+    marginBottom: theme.spacing.md,
   },
-  statCard: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  statIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  statContent: {
-    flex: 1,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#9ca3af',
-    marginBottom: 4,
-  },
-  statValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#f9fafb',
-  },
-  actionsContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 32,
-  },
-  actionButton: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  actionText: {
-    flex: 1,
+  missionPoint: {
     fontSize: 16,
-    color: '#f9fafb',
-    marginLeft: 12,
+    color: theme.text,
+    marginBottom: theme.spacing.sm,
+    lineHeight: 24,
   },
-  signOutButton: {
-    marginTop: 16,
-  },
-  signOutText: {
-    color: '#ef4444',
+  launchButton: {
+    marginTop: theme.spacing.md,
   },
 });

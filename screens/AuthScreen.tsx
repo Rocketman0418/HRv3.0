@@ -1,240 +1,190 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
-  ScrollView,
   SafeAreaView,
-  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
+import SpaceBackground from '../components/SpaceBackground';
 import HealthRocketBrand from '../components/HealthRocketBrand';
-import { theme, iconStyles } from '../constants/theme';
+import PrimaryButton from '../components/PrimaryButton';
+import GlassCard from '../components/GlassCard';
+import { theme } from '../constants/theme';
 
-export default function ProfileScreen() {
-  const { user, userData, signOut } = useAuth();
+export default function AuthScreen() {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [launchCode, setLaunchCode] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSignOut = async () => {
-    console.log('=== SIGN OUT BUTTON PRESSED ===');
+  const { signIn, signUp } = useAuth();
+
+  const handleAuth = async () => {
+    if (!email || !password || (isSignUp && !name)) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
     try {
-      console.log('Calling signOut function...');
-      await signOut();
-      console.log('=== SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== SIGN OUT ERROR ===', error);
-      Alert.alert('Error', 'Failed to sign out. Please try again.');
+      if (isSignUp) {
+        const { error } = await signUp(email, password, name, launchCode);
+        if (error) throw error;
+      } else {
+        const { error } = await signIn(email, password);
+        if (error) throw error;
+      }
+    } catch (error: any) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleDebugSignOut = async () => {
-    console.log('=== DEBUG SIGN OUT BUTTON PRESSED ===');
-    try {
-      console.log('DEBUG: Calling signOut function...');
-      await signOut();
-      console.log('=== DEBUG SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== DEBUG SIGN OUT ERROR ===', error);
-      Alert.alert('Debug Error', 'Failed to sign out. Please try again.');
-    }
-  };
-
-  const stats = [
-    {
-      label: 'Total Fuel Points',
-      value: userData?.fuel_points?.toLocaleString() || '0',
-      icon: 'flame-outline',
-      style: iconStyles.fuelPoints,
-    },
-    {
-      label: 'Current Level',
-      </KeyboardAvoidingView>
-    </SpaceBackground>
-      icon: 'trophy-outline',
-      color: '#2563eb',
-    },
-    {
-      label: 'Burn Streak',
-      value: `${userData?.burn_streak || 0} days`,
-      icon: 'flash-outline',
-      color: '#ef4444',
-    },
-    {
-      label: 'Health Score',
-      value: `${userData?.health_score || 0}/10`,
-      icon: 'heart-outline',
-      color: '#10b981',
-    },
-  ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View style={styles.avatarContainer}>
-            <Ionicons name="person-circle-outline" size={80} color="#2563eb" />
-          </View>
-          <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
-          <Text style={styles.email}>{userData?.email || user?.email}</Text>
-        </View>
-
-        <View style={styles.statsContainer}>
-          <Text style={styles.sectionTitle}>Your Stats</Text>
-          {stats.map((stat, index) => (
-            <View key={index} style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: stat.color }]}>
-                <Ionicons name={stat.icon as any} size={24} color="white" />
-              </View>
-              <View style={styles.statContent}>
-                <Text style={styles.statLabel}>{stat.label}</Text>
-                <Text style={styles.statValue}>{stat.value}</Text>
-              </View>
+    <SpaceBackground>
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardView}
+        >
+          <View style={styles.content}>
+            <View style={styles.brandContainer}>
+              <HealthRocketBrand variant="horizontal" size="medium" showTagline={true} />
             </View>
-          ))}
-        </View>
 
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="person-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Edit Profile</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
+            <GlassCard style={styles.formCard}>
+              <Text style={styles.title}>
+                {isSignUp ? 'Join the Mission' : 'Welcome Back'}
+              </Text>
+              <Text style={styles.subtitle}>
+                {isSignUp ? 'Start your health journey' : 'Continue your health journey'}
+              </Text>
 
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="notifications-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Notifications</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
+              {isSignUp && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Full Name"
+                  placeholderTextColor={theme.textMuted}
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="words"
+                />
+              )}
 
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="help-circle-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Help & Support</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor={theme.textMuted}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
 
-          <TouchableOpacity style={[styles.actionButton, styles.signOutButton]} onPress={handleSignOut}>
-            <Ionicons name="log-out-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, styles.signOutText]}>Sign Out</Text>
-          </TouchableOpacity>
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor={theme.textMuted}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
 
-          {/* DEBUG: Alternative sign out button */}
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
-            onPress={handleDebugSignOut}
-          >
-            <Ionicons name="bug-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+              {isSignUp && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Launch Code (Optional)"
+                  placeholderTextColor={theme.textMuted}
+                  value={launchCode}
+                  onChangeText={setLaunchCode}
+                  autoCapitalize="characters"
+                />
+              )}
+
+              <PrimaryButton
+                title={isSignUp ? 'Launch My Journey' : 'Sign In'}
+                onPress={handleAuth}
+                loading={loading}
+                style={styles.authButton}
+              />
+
+              <TouchableOpacity
+                style={styles.switchButton}
+                onPress={() => setIsSignUp(!isSignUp)}
+              >
+                <Text style={styles.switchText}>
+                  {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                </Text>
+              </TouchableOpacity>
+            </GlassCard>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </SpaceBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
-  scrollView: {
+  keyboardView: {
     flex: 1,
   },
-  header: {
-    alignItems: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
-  },
-  avatarContainer: {
-    marginBottom: 16,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 4,
-  },
-  email: {
-    fontSize: 16,
-    color: '#9ca3af',
-  },
-  statsContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 16,
-  },
-  statCard: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  statIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  content: {
+    flex: 1,
     justifyContent: 'center',
+    paddingHorizontal: theme.spacing.lg,
+  },
+  brandContainer: {
     alignItems: 'center',
-    marginRight: 16,
+    marginBottom: theme.spacing.xl,
   },
-  statContent: {
-    flex: 1,
+  formCard: {
+    padding: theme.spacing.xl,
   },
-  statLabel: {
-    fontSize: 14,
-    color: '#9ca3af',
-    marginBottom: 4,
-  },
-  statValue: {
-    fontSize: 18,
+  title: {
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#f9fafb',
+    color: theme.text,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
   },
-  actionsContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 32,
-  },
-  actionButton: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  actionText: {
-    flex: 1,
+  subtitle: {
     fontSize: 16,
-    color: '#f9fafb',
-    marginLeft: 12,
+    color: theme.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xl,
   },
-  signOutButton: {
-    marginTop: 16,
+  input: {
+    backgroundColor: theme.surfaceDark,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    color: theme.text,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: theme.glass.borderLight,
   },
-  signOutText: {
-    color: '#ef4444',
+  authButton: {
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
+  },
+  switchButton: {
+    alignItems: 'center',
+  },
+  switchText: {
+    color: theme.primary,
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
