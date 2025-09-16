@@ -14,9 +14,9 @@ export default function HealthRocketBrand({
   showTagline = true 
 }: HealthRocketBrandProps) {
   const sizeStyles = {
-    small: { width: 120, height: 40 },
-    medium: { width: 200, height: 67 },
-    large: { width: 300, height: 100 },
+    small: { width: 50, height: 50 },
+    medium: { width: 70, height: 70 },
+    large: { width: 90, height: 90 },
   };
 
   const textSizes = {
@@ -27,7 +27,7 @@ export default function HealthRocketBrand({
 
   return (
     <View style={styles.container}>
-      <View style={[styles.logoPlaceholder, { width: sizeStyles[size].width, height: sizeStyles[size].width }]}>
+      <View style={[styles.logoPlaceholder, sizeStyles[size]]}>
         <Text style={styles.logoText}>🚀</Text>
       </View>
       <Text style={[styles.brandTitle, { fontSize: textSizes[size].title }]}>
@@ -49,13 +49,21 @@ const styles = StyleSheet.create({
   },
   logoPlaceholder: {
     backgroundColor: theme.primary,
-    borderRadius: 50,
+    borderRadius: 9999, // Perfect circle
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
+    shadowColor: theme.primary,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   logoText: {
-    fontSize: 40,
+    fontSize: 28,
     color: 'white',
   },
   brandTitle: {
