@@ -143,6 +143,11 @@ export default function ProfileScreen() {
               <Ionicons name="log-out-outline" size={20} color={theme.error} />
               <Text style={styles.signOutText}>Sign Out</Text>
             </TouchableOpacity>
+            
+            <TouchableOpacity style={[styles.signOutButton, { marginTop: theme.spacing.sm, backgroundColor: `${theme.warning}20`, borderColor: `${theme.warning}40` }]} onPress={handleDirectSignOut}>
+              <Ionicons name="power-outline" size={20} color={theme.warning} />
+              <Text style={[styles.signOutText, { color: theme.warning }]}>Direct Sign Out (Debug)</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </SafeAreaView>
