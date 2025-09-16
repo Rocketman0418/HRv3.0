@@ -1,0 +1,47 @@
+📋 Current Working Versions & Documentation
+Core Framework Versions:
+
+{
+  "expo": "^54.0.0",
+  "expo-router": "~5.0.2", 
+  "react": "19.1.0",
+  "react-dom": "19.1.0",
+  "react-native": "0.81.1",
+  "react-native-web": "^0.20.0"
+}
+📚 Official Documentation Links:
+Expo SDK 54
+
+Docs: https://docs.expo.dev/versions/v54.0.0/
+Release Notes: https://blog.expo.dev/expo-sdk-54-is-now-available-869c65442fb3
+Expo Router 5.0.2
+
+Docs: https://docs.expo.dev/router/introduction/
+API Reference: https://docs.expo.dev/versions/v54.0.0/sdk/router/
+React 19.1.0
+
+Docs: https://react.dev/
+Release Notes: https://react.dev/blog/2024/12/05/react-19
+React DOM 19.1.0
+
+Docs: https://react.dev/reference/react-dom
+API Reference: https://react.dev/reference/react-dom/client
+React Native 0.81.1
+
+Docs: https://reactnative.dev/docs/0.81/getting-started
+Release Notes: https://github.com/facebook/react-native/releases/tag/v0.81.1
+React Native Web 0.20.0
+
+Docs: https://necolas.github.io/react-native-web/
+GitHub: https://github.com/necolas/react-native-web
+🔒 Version Compatibility Matrix:
+Expo SDK 54 ↔ Expo Router ~5.0.2 ✅
+React 19.1.0 ↔ React DOM 19.1.0 ✅
+React Native 0.81.1 ↔ Expo SDK 54 ✅
+React Native Web 0.20.0 ↔ React 19 ✅
+⚠️ Critical Notes:
+Always use these exact versions for this project
+Expo SDK 54 requires Expo Router ~5.0.2 (not 4.x or 7.x)
+React 19.1.0 is the latest stable version working with this setup
+React Native 0.81.1 is the version bundled with Expo SDK 54
+This configuration is tested and working in both Bolt preview and Expo Go! 🚀
