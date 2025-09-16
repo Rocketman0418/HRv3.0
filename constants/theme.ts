@@ -1,47 +1,53 @@
-// Health Rocket V3 Theme - Exact V2 Brand Preservation
-// Following RocketHub Design System Guidelines
+// Health Rocket V3 Theme - EXACT V2 Brand Preservation with V2 Assets
+// Following RocketHub Design System Guidelines with V2 Space Background
 
 export const theme = {
-  // Primary brand colors (DO NOT CHANGE - Exact V2 preservation)
-  primary: '#FF6B00',           // Exact V2 orange
+  // Primary brand colors (EXACT V2 PRESERVATION - DO NOT CHANGE)
+  primary: '#FF6B00',           // EXACT V2 orange - matches logo
   primaryDark: '#E55A00',       // Darker orange for pressed states
   primaryLight: '#FF8533',      // Lighter orange for highlights
   
-  // Space theme foundation
-  background: '#111827',        // Dark space base
-  backgroundDeep: '#0F172A',    // Deeper space for contrast
-  surface: 'rgba(17, 24, 39, 0.7)', // Semi-transparent panels
-  surfaceLight: 'rgba(17, 24, 39, 0.5)', // Lighter panels for hierarchy
-  surfaceDark: 'rgba(17, 24, 39, 0.9)', // Darker panels for emphasis
+  // Space theme foundation (V2 matching)
+  background: '#0a0a0a',        // Deep space black base
+  backgroundDeep: '#000000',    // Deeper space for contrast
+  surface: 'rgba(45, 55, 72, 0.9)', // Semi-transparent panels over space
+  surfaceLight: 'rgba(45, 55, 72, 0.7)', // Lighter panels for hierarchy
+  surfaceDark: 'rgba(26, 32, 44, 0.95)', // Darker panels for emphasis
   
-  // Text system (high contrast for accessibility)
-  text: '#FFFFFF',              // Primary text
-  textSecondary: '#D1D5DB',     // Secondary text
-  textMuted: '#9CA3AF',         // Muted text
-  textDark: '#6B7280',          // Dark muted text
+  // Text system (high contrast for accessibility over space background)
+  text: '#FFFFFF',              // Primary text - high contrast on space
+  textSecondary: '#E2E8F0',     // Secondary text
+  textMuted: '#CBD5E0',         // Muted text
+  textDark: '#A0AEC0',          // Dark muted text
   
-  // Cosmic accent system
+  // V2 Cosmic accent system (matching V2 colors)
   accent: '#3B82F6',            // Cosmic blue
   accentPurple: '#8B5CF6',      // Cosmic purple
   accentTeal: '#14B8A6',        // Cosmic teal
   
-  // Feedback colors
-  success: '#10B981',           // Green for success
+  // Feedback colors (V2 matching)
+  success: '#10B981',           // Green for success - matches "LAUNCHING HEALTH-SPAN"
   warning: '#F59E0B',           // Yellow for warnings
   error: '#EF4444',             // Red for errors
   info: '#3B82F6',              // Blue for info
   
-  // Gamification colors
+  // Gamification colors (V2 exact matching)
   fuelPoints: '#FF6B00',        // Same as primary for consistency
   achievement: '#10B981',       // Green for achievements
   level: '#8B5CF6',             // Purple for level progression
   streak: '#EF4444',            // Red for streak indicators
+  healthScore: '#10B981',       // Green for health score
+  energyLevel: '#3B82F6',       // Blue for energy
+  focusScore: '#8B5CF6',        // Purple for focus
   
-  // Glass morphism effects
+  // Glass morphism effects (floating over space background)
   glass: {
-    background: 'rgba(17, 24, 39, 0.7)',
-    border: 'rgba(255, 107, 0, 0.2)',
-    shadow: 'rgba(0, 0, 0, 0.3)',
+    background: 'rgba(45, 55, 72, 0.9)',
+    backgroundLight: 'rgba(45, 55, 72, 0.7)',
+    border: 'rgba(255, 107, 0, 0.3)',
+    borderLight: 'rgba(255, 107, 0, 0.2)',
+    shadow: 'rgba(0, 0, 0, 0.5)',
+    glow: 'rgba(255, 107, 0, 0.4)',
   },
   
   // Animation durations
@@ -71,17 +77,14 @@ export const theme = {
   },
 };
 
-// Space background configuration
-export const SPACE_BACKGROUND = 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?auto=format&fit=crop&q=80&w=2000';
+// V2 Space background configuration (using actual V2 asset)
+export const SPACE_BACKGROUND = require('../assets/images/space-background-v2.png');
 
-// Alternative space backgrounds for variety
-export const SPACE_BACKGROUNDS = [
-  'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?auto=format&fit=crop&q=80&w=2000',
-  'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&q=80&w=2000',
-  'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&q=80&w=2000',
-];
+// V2 Logo assets
+export const HR_HORIZONTAL_LOGO = require('../assets/images/hr-horizontal-v2.png');
+export const HR_ROUND_LOGO = require('../assets/images/hr-round-logo.png');
 
-// Common styles for glass morphism
+// Common styles for glass morphism (floating over space background)
 export const glassStyles = {
   backgroundColor: theme.glass.background,
   borderWidth: 1,
@@ -92,12 +95,21 @@ export const glassStyles = {
     width: 0,
     height: 4,
   },
-  shadowOpacity: 0.3,
-  shadowRadius: 8,
-  elevation: 8,
+  shadowOpacity: 0.5,
+  shadowRadius: 12,
+  elevation: 12,
 };
 
-// Button styles
+// Enhanced glass styles with glow effect
+export const glassStylesWithGlow = {
+  ...glassStyles,
+  shadowColor: theme.glass.glow,
+  shadowOpacity: 0.6,
+  shadowRadius: 16,
+  elevation: 16,
+};
+
+// Button styles (V2 matching)
 export const buttonStyles = {
   primary: {
     backgroundColor: theme.primary,
@@ -112,13 +124,13 @@ export const buttonStyles = {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 12,
   },
   secondary: {
     backgroundColor: 'transparent',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: theme.primary,
     borderRadius: theme.radius.md,
     paddingVertical: theme.spacing.md,
@@ -126,6 +138,34 @@ export const buttonStyles = {
     minHeight: 44,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+};
+
+// V2 Icon styles with exact color matching
+export const iconStyles = {
+  fuelPoints: {
+    backgroundColor: theme.primary,
+    color: '#FFFFFF',
+  },
+  healthScore: {
+    backgroundColor: theme.success,
+    color: '#FFFFFF',
+  },
+  burnStreak: {
+    backgroundColor: theme.streak,
+    color: '#FFFFFF',
+  },
+  energyLevel: {
+    backgroundColor: theme.accent,
+    color: '#FFFFFF',
+  },
+  focusScore: {
+    backgroundColor: theme.accentPurple,
+    color: '#FFFFFF',
+  },
+  currentLevel: {
+    backgroundColor: theme.accent,
+    color: '#FFFFFF',
   },
 };
 

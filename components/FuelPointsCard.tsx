@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import GlassCard from './GlassCard';
-import { theme } from '../constants/theme';
+import { theme, iconStyles } from '../constants/theme';
 
 export default function FuelPointsCard() {
   const { userData } = useAuth();
@@ -15,7 +15,7 @@ export default function FuelPointsCard() {
   return (
     <GlassCard style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.iconContainer}>
+        <View style={[styles.iconContainer, iconStyles.fuelPoints]}>
           <Ionicons name="flame" size={28} color={theme.primary} />
         </View>
         <Text style={styles.title}>Fuel Points</Text>
@@ -46,18 +46,17 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: `${theme.primary}20`,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: theme.spacing.sm + 4,
-    shadowColor: theme.primary,
+    shadowColor: theme.glass.glow,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   title: {
     fontSize: 20,

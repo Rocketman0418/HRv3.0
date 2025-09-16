@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import GlassCard from './GlassCard';
-import { theme } from '../constants/theme';
+import { theme, iconStyles } from '../constants/theme';
 
 
 export default function StatsGrid() {
@@ -15,32 +15,28 @@ export default function StatsGrid() {
       value: userData?.health_score?.toString() || '0',
       unit: '/10',
       icon: 'heart',
-      color: theme.success,
-      bgColor: `${theme.success}20`,
+      style: iconStyles.healthScore,
     },
     {
       title: 'Burn Streak',
       value: userData?.burn_streak?.toString() || '0',
       unit: 'days',
       icon: 'flash',
-      color: theme.streak,
-      bgColor: `${theme.streak}20`,
+      style: iconStyles.burnStreak,
     },
     {
       title: 'Energy Level',
       value: '0', // This would come from a calculation or separate field
       unit: '%',
       icon: 'battery-charging',
-      color: theme.accent,
-      bgColor: `${theme.accent}20`,
+      style: iconStyles.energyLevel,
     },
     {
       title: 'Focus Score',
       value: '0', // This would come from a calculation or separate field
       unit: '/10',
       icon: 'eye',
-      color: theme.accentPurple,
-      bgColor: `${theme.accentPurple}20`,
+      style: iconStyles.focusScore,
     },
   ];
 
@@ -50,8 +46,8 @@ export default function StatsGrid() {
       <View style={styles.grid}>
         {stats.map((stat, index) => (
           <GlassCard key={index} style={styles.statCard} padding="md">
-            <View style={[styles.iconContainer, { backgroundColor: stat.bgColor }]}>
-              <Ionicons name={stat.icon as any} size={20} color={stat.color} />
+            <View style={[styles.iconContainer, stat.style]}>
+              <Ionicons name={stat.icon as any} size={20} color="#FFFFFF" />
             </View>
             <Text style={styles.statValue}>
               {stat.value}
@@ -96,14 +92,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: theme.spacing.sm,
-    shadowColor: 'rgba(0, 0, 0, 0.2)',
+    shadowColor: theme.glass.glow,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   statValue: {
     fontSize: 26,

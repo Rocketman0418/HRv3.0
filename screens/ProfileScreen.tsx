@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
+import HealthRocketBrand from '../components/HealthRocketBrand';
+import { theme, iconStyles } from '../constants/theme';
 
 export default function ProfileScreen() {
   const { user, userData, signOut } = useAuth();
@@ -43,34 +45,36 @@ export default function ProfileScreen() {
       label: 'Total Fuel Points',
       value: userData?.fuel_points?.toLocaleString() || '0',
       icon: 'flame-outline',
-      color: '#f59e0b',
+      style: iconStyles.fuelPoints,
     },
     {
       label: 'Current Level',
       value: userData?.level || 1,
       icon: 'trophy-outline',
-      color: '#2563eb',
+      style: iconStyles.currentLevel,
     },
     {
       label: 'Burn Streak',
       value: `${userData?.burn_streak || 0} days`,
       icon: 'flash-outline',
-      color: '#ef4444',
+      style: iconStyles.burnStreak,
     },
     {
       label: 'Health Score',
       value: `${userData?.health_score || 0}/10`,
       icon: 'heart-outline',
-      color: '#10b981',
+      style: iconStyles.healthScore,
     },
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SpaceBackground>
+      <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
+          <HealthRocketBrand variant="round" size="small" showTagline={false} />
           <View style={styles.avatarContainer}>
-            <Ionicons name="person-circle-outline" size={80} color="#2563eb" />
+            <Ionicons name="person-circle-outline" size={80} color={theme.primary} />
           </View>
           <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
           <Text style={styles.email}>{userData?.email || user?.email}</Text>
@@ -80,7 +84,7 @@ export default function ProfileScreen() {
           <Text style={styles.sectionTitle}>Your Stats</Text>
           {stats.map((stat, index) => (
             <View key={index} style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: stat.color }]}>
+              <View style={[styles.statIcon, stat.style]}>
                 <Ionicons name={stat.icon as any} size={24} color="white" />
               </View>
               <View style={styles.statContent}>
@@ -125,7 +129,8 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </SpaceBackground>
   );
 }
 

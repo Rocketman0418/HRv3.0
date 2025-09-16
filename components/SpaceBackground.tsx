@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ImageBackground, StyleSheet } from 'react-native';
-import { SPACE_BACKGROUND, theme } from '../constants/theme';
+import { SPACE_BACKGROUND } from '../constants/theme';
 
 interface SpaceBackgroundProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface SpaceBackgroundProps {
 export default function SpaceBackground({ children, overlay = true }: SpaceBackgroundProps) {
   return (
     <ImageBackground
-      source={{ uri: SPACE_BACKGROUND }}
+      source={SPACE_BACKGROUND}
       style={styles.background}
       resizeMode="cover"
     >
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)', // Subtle overlay for text readability
   },
 });

@@ -13,6 +13,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../GlassCard';
 import PrimaryButton from '../PrimaryButton';
+import HealthRocketBrand from '../HealthRocketBrand';
 import { theme } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -140,6 +141,9 @@ export default function OnboardingFlow() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.brandHeader}>
+        <HealthRocketBrand variant="horizontal" size="medium" showTagline={true} />
+      </View>
       <GlassCard style={styles.content}>
         <View style={styles.innerContent}>
           {/* Progress Indicator */}
@@ -208,6 +212,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: theme.spacing.lg,
+  },
+  brandHeader: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg,
   },
   content: {
     flex: 1,
