@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -6,142 +6,132 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
-  Switch,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import SpaceBackground from '../components/SpaceBackground';
+import { useAuth } from '../contexts/AuthContext';
+import HealthRocketBrand from '../components/HealthRocketBrand';
+import { theme, iconStyles } from '../constants/theme';
 
-export default function SettingsScreen() {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(true);
+export default function ProfileScreen() {
+  const { user, userData, signOut } = useAuth();
 
-  const settingsGroups = [
+  const handleSignOut = async () => {
+    console.log('=== SIGN OUT BUTTON PRESSED ===');
+    try {
+      console.log('Calling signOut function...');
+      await signOut();
+      console.log('=== SIGN OUT COMPLETED SUCCESSFULLY ===');
+    } catch (error) {
+      console.error('=== SIGN OUT ERROR ===', error);
+      Alert.alert('Error', 'Failed to sign out. Please try again.');
+    }
+  };
+
+  const handleDebugSignOut = async () => {
+    console.log('=== DEBUG SIGN OUT BUTTON PRESSED ===');
+    try {
+      console.log('DEBUG: Calling signOut function...');
+      await signOut();
+      console.log('=== DEBUG SIGN OUT COMPLETED SUCCESSFULLY ===');
+    } catch (error) {
+      console.error('=== DEBUG SIGN OUT ERROR ===', error);
+      Alert.alert('Debug Error', 'Failed to sign out. Please try again.');
+    }
+  };
+
+  const stats = [
     {
-      title: 'Preferences',
-      items: [
-        {
-          icon: 'notifications-outline',
-          label: 'Push Notifications',
-          type: 'switch',
-          value: notificationsEnabled,
-          onToggle: setNotificationsEnabled,
-        },
-        {
-          icon: 'moon-outline',
-          label: 'Dark Mode',
-          type: 'switch',
-          value: darkModeEnabled,
-          onToggle: setDarkModeEnabled,
-        },
-        {
-          icon: 'volume-high-outline',
-          label: 'Sound Effects',
-          type: 'switch',
-          value: soundEnabled,
-          onToggle: setSoundEnabled,
-        },
-      ],
+      label: 'Total Fuel Points',
+      value: userData?.fuel_points?.toLocaleString() || '0',
+      icon: 'flame-outline',
+      style: iconStyles.fuelPoints,
     },
     {
-      title: 'Account',
-      items: [
-        {
-          icon: 'person-outline',
-          label: 'Edit Profile',
-          type: 'navigation',
-          onPress: () => console.log('Edit Profile'),
-        },
-        {
-          icon: 'lock-closed-outline',
-          label: 'Privacy Settings',
-          type: 'navigation',
-          onPress: () => console.log('Privacy Settings'),
-        },
-        {
-          icon: 'card-outline',
-          label: 'Subscription',
-          type: 'navigation',
-          onPress: () => console.log('Subscription'),
-        },
-      ],
+      label: 'Current Level',
+      value: userData?.level || 1,
+      icon: 'trophy-outline',
+      style: iconStyles.currentLevel,
     },
     {
-      title: 'Support',
-      items: [
-        {
-          icon: 'help-circle-outline',
-          label: 'Help Center',
-          type: 'navigation',
-          onPress: () => console.log('Help Center'),
-        },
-        {
-          icon: 'chatbubble-outline',
-          label: 'Contact Support',
-          type: 'navigation',
-          onPress: () => console.log('Contact Support'),
-        },
-        {
-          icon: 'star-outline',
-          label: 'Rate App',
-          type: 'navigation',
-          onPress: () => console.log('Rate App'),
-        },
-      ],
+      label: 'Burn Streak',
+      value: `${userData?.burn_streak || 0} days`,
+      icon: 'flash-outline',
+      style: iconStyles.burnStreak,
+    },
+    {
+      label: 'Health Score',
+      value: `${userData?.health_score || 0}/10`,
+      icon: 'heart-outline',
+      style: iconStyles.healthScore,
     },
   ];
 
-  const renderSettingItem = (item: any, index: number) => {
-    if (item.type === 'switch') {
-      return (
-        <View key={index} style={styles.settingItem}>
-          <View style={styles.settingLeft}>
-            <Ionicons name={item.icon} size={24} color="#2563eb" />
-            <Text style={styles.settingLabel}>{item.label}</Text>
-          </View>
-          <Switch
-            value={item.value}
-            onValueChange={item.onToggle}
-            trackColor={{ false: '#e5e7eb', true: '#2563eb' }}
-            thumbColor={item.value ? '#ffffff' : '#f4f3f4'}
-          />
-        </View>
-      );
-    }
-
-    return (
-      <TouchableOpacity key={index} style={styles.settingItem} onPress={item.onPress}>
-        <View style={styles.settingLeft}>
-          <Ionicons name={item.icon} size={24} color="#2563eb" />
-          <Text style={styles.settingLabel}>{item.label}</Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-      </TouchableOpacity>
-    );
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SpaceBackground>
+      <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Text style={styles.title}>Settings</Text>
-          <Text style={styles.subtitle}>Customize your Health Rocket experience</Text>
+          <HealthRocketBrand variant="round" size="small" showTagline={false} />
+          <View style={styles.avatarContainer}>
+            <Ionicons name="person-circle-outline" size={80} color={theme.primary} />
+          </View>
+          <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
+          <Text style={styles.email}>{userData?.email || user?.email}</Text>
         </View>
 
-        {settingsGroups.map((group, groupIndex) => (
-          <View key={groupIndex} style={styles.settingsGroup}>
-            <Text style={styles.groupTitle}>{group.title}</Text>
-            <View style={styles.groupContainer}>
-              {group.items.map((item, itemIndex) => renderSettingItem(item, itemIndex))}
+        <View style={styles.statsContainer}>
+          <Text style={styles.sectionTitle}>Your Stats</Text>
+          {stats.map((stat, index) => (
+            <View key={index} style={styles.statCard}>
+              <View style={[styles.statIcon, stat.style]}>
+                <Ionicons name={stat.icon as any} size={24} color="white" />
+              </View>
+              <View style={styles.statContent}>
+                <Text style={styles.statLabel}>{stat.label}</Text>
+                <Text style={styles.statValue}>{stat.value}</Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.version}>Health Rocket V3</Text>
-          <Text style={styles.versionNumber}>Version 1.0.0</Text>
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="person-outline" size={20} color="#2563eb" />
+            <Text style={styles.actionText}>Edit Profile</Text>
+            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="notifications-outline" size={20} color="#2563eb" />
+            <Text style={styles.actionText}>Notifications</Text>
+            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="help-circle-outline" size={20} color="#2563eb" />
+            <Text style={styles.actionText}>Help & Support</Text>
+            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.actionButton, styles.signOutButton]} onPress={handleSignOut}>
+            <Ionicons name="log-out-outline" size={20} color="#ef4444" />
+            <Text style={[styles.actionText, styles.signOutText]}>Sign Out</Text>
+          </TouchableOpacity>
+
+          {/* DEBUG: Alternative sign out button */}
+          <TouchableOpacity 
+            style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
+            onPress={handleDebugSignOut}
+          >
+            <Ionicons name="bug-outline" size={20} color="#ef4444" />
+            <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </SpaceBackground>
   );
 }
 
@@ -154,33 +144,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    alignItems: 'center',
+    paddingVertical: 32,
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 16,
   },
-  title: {
-    fontSize: 28,
+  avatarContainer: {
+    marginBottom: 16,
+  },
+  name: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#f9fafb',
     marginBottom: 4,
   },
-  subtitle: {
+  email: {
     fontSize: 16,
     color: '#9ca3af',
   },
-  settingsGroup: {
-    marginBottom: 32,
+  statsContainer: {
     paddingHorizontal: 20,
+    marginBottom: 32,
   },
-  groupTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#f9fafb',
-    marginBottom: 12,
+    marginBottom: 16,
   },
-  groupContainer: {
+  statCard: {
     backgroundColor: '#1f2937',
     borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -190,38 +187,57 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  settingItem: {
-    flexDirection: 'row',
+  statIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#374151',
+    marginRight: 16,
   },
-  settingLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  statContent: {
     flex: 1,
   },
-  settingLabel: {
+  statLabel: {
+    fontSize: 14,
+    color: '#9ca3af',
+    marginBottom: 4,
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#f9fafb',
+  },
+  actionsContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 32,
+  },
+  actionButton: {
+    backgroundColor: '#1f2937',
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  actionText: {
+    flex: 1,
     fontSize: 16,
     color: '#f9fafb',
     marginLeft: 12,
   },
-  footer: {
-    alignItems: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
+  signOutButton: {
+    marginTop: 16,
   },
-  version: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ff6b35',
-    marginBottom: 4,
-  },
-  versionNumber: {
-    fontSize: 14,
-    color: '#9ca3af',
+  signOutText: {
+    color: '#ef4444',
   },
 });
