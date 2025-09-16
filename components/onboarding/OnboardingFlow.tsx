@@ -15,7 +15,7 @@ import GlassCard from '../GlassCard';
 import MissionIntro from './MissionIntro';
 import BurnStreakIntro from './BurnStreakIntro';
 import CommunityIntro from './CommunityIntro';
-import ComprehensiveHealthAssessment from './ComprehensiveHealthAssessment';
+import ComprehensiveHealthAssessment from '@/components/onboarding/ComprehensiveHealthAssessment';
 import { theme } from '../../constants/theme';
 import { supabase } from '../../lib/supabase';
 
