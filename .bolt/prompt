@@ -1,6 +1,10 @@
-📋 Current Working Versions & Documentation
-Core Framework Versions:
+# Essential Bolt.new Project Knowledge (Complete)
+*Core essentials for consistent Health Rocket V3 development*
 
+## 🎯 **1. TECH STACK (EXACT VERSIONS - CRITICAL)**
+
+### **Core Framework Versions (NEVER CHANGE)**
+```json
 {
   "expo": "^54.0.0",
   "expo-router": "~5.0.2", 
@@ -9,39 +13,179 @@ Core Framework Versions:
   "react-native": "0.81.1",
   "react-native-web": "^0.20.0"
 }
-📚 Official Documentation Links:
-Expo SDK 54
+```
 
-Docs: https://docs.expo.dev/versions/v54.0.0/
-Release Notes: https://blog.expo.dev/expo-sdk-54-is-now-available-869c65442fb3
-Expo Router 5.0.2
+### **Version Compatibility Matrix**
+- ✅ Expo SDK 54 ↔ Expo Router ~5.0.2 
+- ✅ React 19.1.0 ↔ React DOM 19.1.0
+- ✅ React Native 0.81.1 ↔ Expo SDK 54
+- ✅ React Native Web 0.20.0 ↔ React 19
 
-Docs: https://docs.expo.dev/router/introduction/
-API Reference: https://docs.expo.dev/versions/v54.0.0/sdk/router/
-React 19.1.0
+### **Critical Version Notes**
+- **Always use these exact versions** - tested and working in Bolt preview + Expo Go
+- **Expo SDK 54** requires **Expo Router ~5.0.2** (not 4.x or 7.x)
+- **React Native 0.81.1** is bundled with Expo SDK 54
+- This configuration is **production-tested** ✅
 
-Docs: https://react.dev/
-Release Notes: https://react.dev/blog/2024/12/05/react-19
-React DOM 19.1.0
+### **Official Documentation References**
+- **Expo SDK 54**: https://docs.expo.dev/versions/v54.0.0/
+- **Expo Router 5.0.2**: https://docs.expo.dev/router/introduction/
+- **React 19.1.0**: https://react.dev/
+- **React Native 0.81.1**: https://reactnative.dev/docs/0.81/getting-started
+- **React Native Web 0.20.0**: https://necolas.github.io/react-native-web/
 
-Docs: https://react.dev/reference/react-dom
-API Reference: https://react.dev/reference/react-dom/client
-React Native 0.81.1
+## 🏗️ **2. PROJECT ESSENTIALS**
 
-Docs: https://reactnative.dev/docs/0.81/getting-started
-Release Notes: https://github.com/facebook/react-native/releases/tag/v0.81.1
-React Native Web 0.20.0
+### **Database & Environment**
+```typescript
+// Supabase Project ID: dptskihajsxospvqjfqh
+// Environment: Bolt.new + Expo Go mobile testing
+```
 
-Docs: https://necolas.github.io/react-native-web/
-GitHub: https://github.com/necolas/react-native-web
-🔒 Version Compatibility Matrix:
-Expo SDK 54 ↔ Expo Router ~5.0.2 ✅
-React 19.1.0 ↔ React DOM 19.1.0 ✅
-React Native 0.81.1 ↔ Expo SDK 54 ✅
-React Native Web 0.20.0 ↔ React 19 ✅
-⚠️ Critical Notes:
-Always use these exact versions for this project
-Expo SDK 54 requires Expo Router ~5.0.2 (not 4.x or 7.x)
-React 19.1.0 is the latest stable version working with this setup
-React Native 0.81.1 is the version bundled with Expo SDK 54
-This configuration is tested and working in both Bolt preview and Expo Go! 🚀
+### **Brand Identity**
+```css
+/* Health Rocket Signature Brand */
+:root {
+  --hr-primary-orange: #FF6B00;  /* Signature orange */
+  --hr-space-theme: true;        /* Space/cosmic elements */
+  --hr-messaging: "LAUNCHING HEALTH-SPAN";
+}
+```
+
+### **Core Constraints (Non-Negotiable)**
+```typescript
+// ⚠️ CRITICAL DEVELOPMENT RULES ⚠️
+// Mobile-First Priority: React Native primary, Web secondary
+// Fresh V3 Start: No V2 data migration required
+// FP-Based Economy: Contests use Fuel Points for entry (no separate credits)
+// Unified Chat: Single system with contest-specific threads
+// Launch Code Signup: Required codes that auto-assign users to communities
+// Offline-First: Must work without internet connectivity
+// Battery Optimized: 60fps performance on mid-range devices
+// Exact Versions Only: Use the specified framework versions above
+```
+
+## 🏗️ **3. DEVELOPMENT PRINCIPLES**
+
+### **Mobile-First Architecture Rules**
+```typescript
+// Development Priority Order:
+// 1. React Native mobile implementation (primary)
+// 2. Expo Go testing validation (required)
+// 3. Web platform enhancement (secondary)
+// 4. Cross-platform sync (essential)
+
+// Performance Requirements:
+// - 60fps on mid-range mobile devices
+// - <3 second response times
+// - Battery consumption optimization
+// - Offline functionality preservation
+```
+
+### **Expo Go Testing Standards**
+```json
+{
+  "expo": {
+    "name": "Health Rocket V3",
+    "slug": "health-rocket-v3", 
+    "scheme": "healthrocket",
+    "platforms": ["ios", "android", "web"],
+    "orientation": "portrait"
+  }
+}
+```
+
+## 🎮 **4. HEALTH ROCKET V3 CORE SYSTEMS**
+
+### **Simplified V3 Feature Set**
+```typescript
+interface HealthRocketV3Systems {
+  fuelPointsSystem: {
+    purpose: 'Universal currency for all app activities';
+    earningMethods: 'Daily boosts, challenges, quests, assessments, contests';
+    usage: 'Level progression, contest entry, feature unlocks';
+    storage: 'Offline-first with real-time sync';
+  };
+  
+  contestSystem: {
+    entryMethod: 'Fuel Points (no separate contest credits)';
+    features: 'Dedicated chat threads, verification, leaderboards';
+    integration: 'Part of unified chat system';
+    mobileOptimized: 'Camera integration for verification';
+  };
+  
+  unifiedChatSystem: {
+    architecture: 'Single system with contextual threads';
+    threadTypes: 'General community, contest-specific, challenges';
+    realTime: 'WebSocket with mobile battery optimization';
+    offline: 'Local message caching with sync';
+  };
+  
+  communitySystem: {
+    launchCodes: {
+      purpose: 'Required signup codes for community assignment';
+      adminControlled: 'Admins create codes and associated communities';
+      autoAssignment: 'Users auto-joined to community on signup';
+      singleUse: 'One-time use codes with expiration';
+    };
+    
+    boostCodes: {
+      purpose: 'Admin-created bonus Fuel Points codes';
+      redemption: 'Users redeem in UI for instant FP bonus';
+      flexibility: 'Admin sets FP amount and usage limits';
+      tracking: 'Full audit trail of code usage';
+    };
+  };
+  
+  mobileIntegration: {
+    requiredFeatures: 'Camera, push notifications, biometric auth';
+    healthApps: 'HealthKit/Google Fit integration';
+    voiceInterface: 'Speech-to-text for quick interactions';
+    offlineSync: 'Local storage with background sync';
+  };
+}
+```
+
+## 🤖 **5. AI INTEGRATION (ESSENTIAL PATTERNS)**
+
+### **Cosmo AI Assistant Architecture**
+```typescript
+// AI Stack: Claude workflow design + N8N orchestration + Gemini runtime
+// Mobile Interface: Voice and text optimized for mobile
+// Personalization: User pattern analysis for health optimization
+// Real-time Responses: Gemini Flash for cost-effective interactions
+// Offline Capability: Cached responses for common queries
+```
+
+## 📱 **6. CRITICAL MOBILE FEATURES**
+
+### **Required Device Integrations**
+```typescript
+// Camera: Contest/challenge verification with photo/video
+// Push Notifications: Real-time engagement and reminders  
+// Biometric Auth: Face ID, Touch ID for secure access
+// Health Apps: HealthKit/Google Fit data synchronization
+// Voice Interface: Speech recognition for hands-free interaction
+// Location: Optional location-based challenge features
+// Offline Storage: SQLite with Supabase sync for all data
+```
+
+---
+
+## 🚨 **DECISION FRAMEWORK FOR BOLT.NEW**
+
+### **When Bolt.new Should Ask Questions:**
+- Feature complexity exceeds mobile performance constraints
+- V2 business logic needs clarification
+- AI integration patterns need specification
+- Data migration approaches need validation
+
+### **When Bolt.new Should Push Back:**
+- Non-mobile-first solutions proposed  
+- V2 feature omission suggested
+- Performance-degrading patterns recommended
+- Non-offline-capable architectures suggested
+
+---
+
+*This streamlined Project Knowledge provides essential constraints while allowing detailed features to be added progressively through guided Claude prompts.*
