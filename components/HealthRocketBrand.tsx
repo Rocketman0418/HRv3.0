@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { HR_HORIZONTAL_LOGO, HR_ROUND_LOGO, theme } from '../constants/theme';
+import { View, Text, StyleSheet } from 'react-native';
+import { theme } from '../constants/theme';
 
 interface HealthRocketBrandProps {
   variant?: 'horizontal' | 'round';
@@ -13,8 +13,6 @@ export default function HealthRocketBrand({
   size = 'medium',
   showTagline = true 
 }: HealthRocketBrandProps) {
-  const logoSource = variant === 'horizontal' ? HR_HORIZONTAL_LOGO : HR_ROUND_LOGO;
-  
   const sizeStyles = {
     small: { width: 120, height: 40 },
     medium: { width: 200, height: 67 },
@@ -27,30 +25,11 @@ export default function HealthRocketBrand({
     large: { title: 32, tagline: 20 },
   };
 
-  if (variant === 'horizontal') {
-    return (
-      <View style={styles.container}>
-        <Image 
-          source={logoSource} 
-          style={[styles.horizontalLogo, sizeStyles[size]]}
-          resizeMode="contain"
-        />
-        {showTagline && (
-          <Text style={[styles.tagline, { fontSize: textSizes[size].tagline }]}>
-            LAUNCHING HEALTH-SPAN
-          </Text>
-        )}
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
-      <Image 
-        source={logoSource} 
-        style={[styles.roundLogo, { width: sizeStyles[size].width, height: sizeStyles[size].width }]}
-        resizeMode="contain"
-      />
+      <View style={[styles.logoPlaceholder, { width: sizeStyles[size].width, height: sizeStyles[size].width }]}>
+        <Text style={styles.logoText}>🚀</Text>
+      </View>
       <Text style={[styles.brandTitle, { fontSize: textSizes[size].title }]}>
         HEALTH ROCKET
       </Text>
@@ -68,11 +47,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  horizontalLogo: {
+  logoPlaceholder: {
+    backgroundColor: theme.primary,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 8,
   },
-  roundLogo: {
-    marginBottom: 12,
+  logoText: {
+    fontSize: 40,
+    color: 'white',
   },
   brandTitle: {
     fontWeight: 'bold',

@@ -77,10 +77,10 @@ export const theme = {
   },
 };
 
-// V2 Space background configuration (using actual V2 asset)
+// V2 Space background configuration (using existing asset)
 export const SPACE_BACKGROUND = require('../assets/images/space-background-v2.png');
 
-// V2 Logo assets
+// V2 Logo assets (using existing assets)
 export const HR_HORIZONTAL_LOGO = require('../assets/images/hr-horizontal-v2.png');
 export const HR_ROUND_LOGO = require('../assets/images/hr-round-logo.png');
 
