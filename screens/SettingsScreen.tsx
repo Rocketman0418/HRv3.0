@@ -6,130 +6,195 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Switch,
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import SpaceBackground from '../components/SpaceBackground';
 import { useAuth } from '../contexts/AuthContext';
 import HealthRocketBrand from '../components/HealthRocketBrand';
-import { theme, iconStyles } from '../constants/theme';
+import GlassCard from '../components/GlassCard';
+import { theme } from '../constants/theme';
 
 export default function SettingsScreen() {
   const { user, userData, signOut } = useAuth();
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = React.useState(true);
+  const [soundEnabled, setSoundEnabled] = React.useState(false);
 
   const handleSignOut = async () => {
-    console.log('=== SIGN OUT BUTTON PRESSED ===');
-    try {
-      console.log('Calling signOut function...');
-      await signOut();
-      console.log('=== SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== SIGN OUT ERROR ===', error);
-      Alert.alert('Error', 'Failed to sign out. Please try again.');
-    }
+    Alert.alert(
+      'Sign Out',
+      'Are you sure you want to sign out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Sign Out',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await signOut();
+            } catch (error) {
+              console.error('Sign out error:', error);
+              Alert.alert('Error', 'Failed to sign out. Please try again.');
+            }
+          },
+        },
+      ]
+    );
   };
 
-  const handleDebugSignOut = async () => {
-    console.log('=== DEBUG SIGN OUT BUTTON PRESSED ===');
-    try {
-      console.log('DEBUG: Calling signOut function...');
-      await signOut();
-      console.log('=== DEBUG SIGN OUT COMPLETED SUCCESSFULLY ===');
-    } catch (error) {
-      console.error('=== DEBUG SIGN OUT ERROR ===', error);
-      Alert.alert('Debug Error', 'Failed to sign out. Please try again.');
-    }
-  };
-
-  const stats = [
+  const settingsGroups = [
     {
-      label: 'Total Fuel Points',
-      value: userData?.fuel_points?.toLocaleString() || '0',
-      icon: 'flame-outline',
-      style: iconStyles.fuelPoints,
+      title: 'Account',
+      items: [
+        {
+          icon: 'person-outline',
+          title: 'Edit Profile',
+          subtitle: 'Update your personal information',
+          onPress: () => console.log('Edit Profile'),
+        },
+        {
+          icon: 'mail-outline',
+          title: 'Email Preferences',
+          subtitle: 'Manage email notifications',
+          onPress: () => console.log('Email Preferences'),
+        },
+        {
+          icon: 'lock-closed-outline',
+          title: 'Privacy & Security',
+          subtitle: 'Manage your privacy settings',
+          onPress: () => console.log('Privacy & Security'),
+        },
+      ],
     },
     {
-      label: 'Current Level',
-      value: userData?.level || 1,
-      icon: 'trophy-outline',
-      style: iconStyles.currentLevel,
+      title: 'Preferences',
+      items: [
+        {
+          icon: 'notifications-outline',
+          title: 'Push Notifications',
+          subtitle: 'Get notified about activities',
+          toggle: true,
+          value: notificationsEnabled,
+          onToggle: setNotificationsEnabled,
+        },
+        {
+          icon: 'moon-outline',
+          title: 'Dark Mode',
+          subtitle: 'Use dark theme',
+          toggle: true,
+          value: darkModeEnabled,
+          onToggle: setDarkModeEnabled,
+        },
+        {
+          icon: 'volume-high-outline',
+          title: 'Sound Effects',
+          subtitle: 'Play sounds for actions',
+          toggle: true,
+          value: soundEnabled,
+          onToggle: setSoundEnabled,
+        },
+      ],
     },
     {
-      label: 'Burn Streak',
-      value: `${userData?.burn_streak || 0} days`,
-      icon: 'flash-outline',
-      style: iconStyles.burnStreak,
-    },
-    {
-      label: 'Health Score',
-      value: `${userData?.health_score || 0}/10`,
-      icon: 'heart-outline',
-      style: iconStyles.healthScore,
+      title: 'Support',
+      items: [
+        {
+          icon: 'help-circle-outline',
+          title: 'Help & FAQ',
+          subtitle: 'Get help and find answers',
+          onPress: () => console.log('Help & FAQ'),
+        },
+        {
+          icon: 'chatbubble-outline',
+          title: 'Contact Support',
+          subtitle: 'Get in touch with our team',
+          onPress: () => console.log('Contact Support'),
+        },
+        {
+          icon: 'star-outline',
+          title: 'Rate the App',
+          subtitle: 'Share your feedback',
+          onPress: () => console.log('Rate the App'),
+        },
+      ],
     },
   ];
 
   return (
     <SpaceBackground>
       <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <HealthRocketBrand variant="round" size="small" showTagline={false} />
-          <View style={styles.avatarContainer}>
-            <Ionicons name="person-circle-outline" size={80} color={theme.primary} />
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <HealthRocketBrand variant="round" size="small" showTagline={false} />
+            <Text style={styles.headerTitle}>Settings</Text>
           </View>
-          <Text style={styles.name}>{userData?.name || 'Entrepreneur'}</Text>
-          <Text style={styles.email}>{userData?.email || user?.email}</Text>
-        </View>
 
-        <View style={styles.statsContainer}>
-          <Text style={styles.sectionTitle}>Your Stats</Text>
-          {stats.map((stat, index) => (
-            <View key={index} style={styles.statCard}>
-              <View style={[styles.statIcon, stat.style]}>
-                <Ionicons name={stat.icon as any} size={24} color="white" />
+          <GlassCard style={styles.profileCard}>
+            <View style={styles.profileRow}>
+              <View style={styles.avatarContainer}>
+                <Ionicons name="person-circle-outline" size={60} color={theme.primary} />
               </View>
-              <View style={styles.statContent}>
-                <Text style={styles.statLabel}>{stat.label}</Text>
-                <Text style={styles.statValue}>{stat.value}</Text>
+              <View style={styles.profileInfo}>
+                <Text style={styles.profileName}>{userData?.name || 'Entrepreneur'}</Text>
+                <Text style={styles.profileEmail}>{userData?.email || user?.email}</Text>
+                <Text style={styles.profileLevel}>Level {userData?.level || 1}</Text>
               </View>
             </View>
+          </GlassCard>
+
+          {settingsGroups.map((group, groupIndex) => (
+            <View key={groupIndex} style={styles.settingsGroup}>
+              <Text style={styles.groupTitle}>{group.title}</Text>
+              <GlassCard style={styles.groupCard}>
+                {group.items.map((item, itemIndex) => (
+                  <TouchableOpacity
+                    key={itemIndex}
+                    style={[
+                      styles.settingItem,
+                      itemIndex < group.items.length - 1 && styles.settingItemBorder,
+                    ]}
+                    onPress={item.onPress}
+                    disabled={item.toggle}
+                  >
+                    <View style={styles.settingLeft}>
+                      <View style={styles.settingIcon}>
+                        <Ionicons name={item.icon as any} size={20} color={theme.primary} />
+                      </View>
+                      <View style={styles.settingText}>
+                        <Text style={styles.settingTitle}>{item.title}</Text>
+                        <Text style={styles.settingSubtitle}>{item.subtitle}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.settingRight}>
+                      {item.toggle ? (
+                        <Switch
+                          value={item.value}
+                          onValueChange={item.onToggle}
+                          trackColor={{ false: theme.surfaceDark, true: `${theme.primary}40` }}
+                          thumbColor={item.value ? theme.primary : theme.textMuted}
+                        />
+                      ) : (
+                        <Ionicons name="chevron-forward" size={20} color={theme.textMuted} />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </GlassCard>
+            </View>
           ))}
-        </View>
 
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="person-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Edit Profile</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="notifications-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Notifications</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="help-circle-outline" size={20} color="#2563eb" />
-            <Text style={styles.actionText}>Help & Support</Text>
-            <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.actionButton, styles.signOutButton]} onPress={handleSignOut}>
-            <Ionicons name="log-out-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, styles.signOutText]}>Sign Out</Text>
-          </TouchableOpacity>
-
-          {/* DEBUG: Alternative sign out button */}
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#fee2e2', marginTop: 8 }]} 
-            onPress={handleDebugSignOut}
-          >
-            <Ionicons name="bug-outline" size={20} color="#ef4444" />
-            <Text style={[styles.actionText, { color: '#ef4444' }]}>DEBUG: Force Sign Out</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          <View style={styles.signOutContainer}>
+            <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+              <Ionicons name="log-out-outline" size={20} color={theme.error} />
+              <Text style={styles.signOutText}>Sign Out</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </SpaceBackground>
   );
@@ -138,106 +203,122 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
   scrollView: {
     flex: 1,
   },
   header: {
     alignItems: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
+    paddingVertical: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.lg,
   },
-  avatarContainer: {
-    marginBottom: 16,
-  },
-  name: {
+  headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 4,
+    color: theme.text,
+    marginTop: theme.spacing.sm,
   },
-  email: {
-    fontSize: 16,
-    color: '#9ca3af',
+  profileCard: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
   },
-  statsContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 32,
+  profileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  sectionTitle: {
+  avatarContainer: {
+    marginRight: theme.spacing.md,
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  profileName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: 16,
+    color: theme.text,
+    marginBottom: theme.spacing.xs,
   },
-  statCard: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
+  profileEmail: {
+    fontSize: 14,
+    color: theme.textSecondary,
+    marginBottom: theme.spacing.xs,
+  },
+  profileLevel: {
+    fontSize: 12,
+    color: theme.primary,
+    fontWeight: '600',
+  },
+  settingsGroup: {
+    marginBottom: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  groupTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.text,
+    marginBottom: theme.spacing.sm,
+  },
+  groupCard: {
+    padding: 0,
+  },
+  settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
   },
-  statIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  settingItemBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: theme.glass.borderLight,
+  },
+  settingLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  settingIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: `${theme.primary}20`,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: theme.spacing.sm,
   },
-  statContent: {
+  settingText: {
     flex: 1,
   },
-  statLabel: {
-    fontSize: 14,
-    color: '#9ca3af',
-    marginBottom: 4,
-  },
-  statValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#f9fafb',
-  },
-  actionsContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 32,
-  },
-  actionButton: {
-    backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  actionText: {
-    flex: 1,
+  settingTitle: {
     fontSize: 16,
-    color: '#f9fafb',
-    marginLeft: 12,
+    fontWeight: '500',
+    color: theme.text,
+    marginBottom: theme.spacing.xs / 2,
+  },
+  settingSubtitle: {
+    fontSize: 12,
+    color: theme.textSecondary,
+  },
+  settingRight: {
+    marginLeft: theme.spacing.sm,
+  },
+  signOutContainer: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.xl,
   },
   signOutButton: {
-    marginTop: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: `${theme.error}20`,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    borderWidth: 1,
+    borderColor: `${theme.error}40`,
   },
   signOutText: {
-    color: '#ef4444',
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.error,
+    marginLeft: theme.spacing.sm,
   },
 });
