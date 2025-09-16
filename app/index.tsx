@@ -6,11 +6,19 @@ import AuthScreen from '../screens/AuthScreen';
 import OnboardingFlow from '@/components/onboarding/OnboardingFlow';
 
 export default function IndexScreen() {
-  const { session, userData, loading } = useAuth();
+  const { session, userData, loading, completeOnboarding } = useAuth();
 
   console.log('IndexScreen render - session exists:', !!session);
   console.log('IndexScreen render - userData:', userData);
   console.log('IndexScreen render - loading:', loading);
+
+  // Auto-complete onboarding for testing - remove in production
+  React.useEffect(() => {
+    if (session && userData && userData.onboarding_completed === false) {
+      console.log('Auto-completing onboarding for testing...');
+      completeOnboarding().catch(console.error);
+    }
+  }, [session, userData, completeOnboarding]);
 
   if (loading) {
     console.log('IndexScreen: Still loading...');
