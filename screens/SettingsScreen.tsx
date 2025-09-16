@@ -14,7 +14,7 @@ import { useAuth } from '../contexts/AuthContext';
 import HealthRocketBrand from '../components/HealthRocketBrand';
 import { theme, iconStyles } from '../constants/theme';
 
-export default function ProfileScreen() {
+export default function SettingsScreen() {
   const { user, userData, signOut } = useAuth();
 
   const handleSignOut = async () => {
